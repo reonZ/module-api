@@ -1,0 +1,16 @@
+{
+    "name": "module-api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "types": "types/index.d.ts",
+    "scripts": {
+        "types": "tsc --watch"
+    },
+    "author": "Idle",
+    "license": "ISC",
+    "devDependencies": {
+        "@biomejs/biome": "^1.5.3",
+        "typescript": "^5.3.3"
+    }
+}

@@ -1,0 +1,10 @@
+{
+    "include": ["index.js", "foundry/**/*.js", "utils/**/*.js"],
+    "compilerOptions": {
+        "allowJs": true,
+        "declaration": true,
+        "emitDeclarationOnly": true,
+        "outDir": "types",
+        "lib": ["ESNext", "dom"]
+    }
+}
