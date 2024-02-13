@@ -1,4 +1,5 @@
 export * from "./actor";
+export * from "./browser";
 export * from "./chat";
 export * from "./classes";
 export * from "./html";
