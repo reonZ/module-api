@@ -121,3 +121,14 @@ export function isHandwrapsOfMightyBlows(item) {
 		item.category === "unarmed"
 	);
 }
+
+/**
+ * @param {Item} item
+ * @param {number} [quantity]
+ * @returns {Coins}
+ */
+export function calculateItemPrice(item, quantity = 1, ratio = 1) {
+	const coins = game.pf2e.Coins.fromPrice(item.price, quantity);
+	if (ratio === 1) return coins;
+	return coins.scale(ratio);
+}

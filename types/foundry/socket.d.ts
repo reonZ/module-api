@@ -14,6 +14,7 @@ export function socketOff(callback: ModuleSocketFunction): void;
  * @param {ModulePacket} packet
  */
 export function socketEmit(packet: ModulePacket): void;
+export function registerPermissionSocket(): void;
 export type ModulePacket = {
     [k: string]: unknown;
     key: string;

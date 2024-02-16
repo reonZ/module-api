@@ -18,6 +18,7 @@ export * from "./hooks";
 export * from "./item";
 export * from "./libwrapper";
 export * from "./localize";
+export * from "./misc";
 export * from "./notifications";
 export * from "./settings";
 export * from "./socket";

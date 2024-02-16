@@ -1,4 +1,4 @@
-import { MODULE } from ".";
+import { MODULE, socketEmit } from ".";
 
 /**
  * @param {object} doc
@@ -33,4 +33,32 @@ export function deleteInMemory(doc, ...path) {
 		if (!cursor) return true;
 	}
 	return delete cursor[last];
+}
+
+/**
+ * @param {object} options
+ * @param {FoundryDocument} options.doc
+ * @param {Record<string, unknown>} [options.updates]
+ * @returns {Promise<void>}
+ */
+export async function updateDocument({ doc, updates, message }, userId) {
+	const foundryDoc =
+		doc instanceof foundry.abstract.Document ? doc : await fromUuid(doc);
+
+	if (!foundryDoc.isOwner) {
+		socketEmit({
+			type: "permission.update-document",
+			doc: foundryDoc.uuid,
+			updates,
+			message,
+		});
+		return;
+	}
+
+	foundryDoc.update(updates);
+
+	if (message) {
+		message.user = userId ?? game.user.id;
+		ChatMessage.implementation.create(message);
+	}
 }

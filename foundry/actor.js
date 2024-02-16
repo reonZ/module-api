@@ -27,3 +27,11 @@ export function getOwner(actor) {
 export function isOwner(actor) {
 	return getOwner(actor) === game.user;
 }
+
+/**
+ * @param {Actor} actor
+ * @returns {string}
+ */
+export function getHighestName(actor) {
+	return actor.token?.name ?? actor.prototypeToken?.name ?? actor.name;
+}

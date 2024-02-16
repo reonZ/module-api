@@ -16,3 +16,13 @@ export function setInMemory(doc: object, ...args: (string | unknown)[]): boolean
  * @returns {boolean}
  */
 export function deleteInMemory(doc: object, ...path: string[]): boolean;
+/**
+ * @param {object} options
+ * @param {FoundryDocument} options.doc
+ * @param {Record<string, unknown>} [options.updates]
+ * @returns {Promise<void>}
+ */
+export function updateDocument({ doc, updates, message }: {
+    doc: FoundryDocument;
+    updates?: Record<string, unknown>;
+}, userId: any): Promise<void>;

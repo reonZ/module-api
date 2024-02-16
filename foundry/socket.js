@@ -1,4 +1,4 @@
-import { MODULE } from ".";
+import { MODULE, updateDocument } from ".";
 
 /**
  * @typedef { {key: string, [k: string]: unknown} } ModulePacket
@@ -24,4 +24,19 @@ export function socketOff(callback) {
  */
 export function socketEmit(packet) {
 	game.socket.emit(`module.${MODULE.id}`, packet);
+}
+
+let permissionSocketRegistered = false;
+export function registerPermissionSocket() {
+	if (permissionSocketRegistered) return;
+
+	permissionSocketRegistered = true;
+
+	socketOn((packet, userId) => {
+		switch (packet.type) {
+			case "permission.update-document":
+				updateDocument(packet, userId);
+				break;
+		}
+	});
 }

@@ -50,4 +50,10 @@ export function itemCarryUpdate(item: object, { carryType, handsHeld, inSlot, in
  * @returns {boolean}
  */
 export function isHandwrapsOfMightyBlows(item: object): boolean;
+/**
+ * @param {Item} item
+ * @param {number} [quantity]
+ * @returns {Coins}
+ */
+export function calculateItemPrice(item: Item, quantity?: number, ratio?: number): Coins;
 export const HANDWRAPS_SLUG: "handwraps-of-mighty-blows";

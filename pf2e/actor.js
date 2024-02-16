@@ -86,3 +86,69 @@ function applyStacking(best, modifier, isBetter) {
 	modifier.enabled = false;
 	return 0;
 }
+
+/**
+ * @typedef {object} TransferItemPacket
+ * @property {string} options.source
+ * @property {string} options.target
+ * @property {string} options.item
+ * @property {number} [options.quantity]
+ * @property {string} [options.containerId]
+ * @property {boolean} [options.newStack]
+ *
+ * @param {object} options
+ * @param {Actor|string} options.source
+ * @param {Actor|string} options.target
+ * @param {Item|string} options.item
+ * @param {number} [options.quantity]
+ * @param {string} [options.containerId]
+ * @param {boolean} [options.newStack]
+ * @returns {Promise<void|TransferItemPacket>}
+ */
+export async function tranferItemToActor({
+	source,
+	target,
+	item,
+	quantity = 1,
+	containerId,
+	newStack = false,
+}) {
+	const sourceActor = source instanceof Actor ? source : await fromUuid(source);
+	const targetActor = target instanceof Actor ? target : await fromUuid(target);
+	if (!targetActor) return;
+
+	const sourceItem = item instanceof Item ? item : await fromUuid(itemsource);
+	if (!sourceItem) return;
+
+	if (!targetActor.isOwner || (sourceActor && !sourceActor.isOwner)) {
+		return {
+			type: "item-to-actor",
+			source: sourceActor?.uuid,
+			target: targetActor.uuid,
+			item: sourceItem.uuid,
+			quantity,
+			containerId,
+			newStack,
+		};
+	}
+
+	const itemQuantity = Math.min(quantity, sourceItem.quantity);
+	const newQuantity = sourceItem.quantity - itemQuantity;
+
+	if (newQuantity < 1) {
+		await sourceItem.delete();
+	} else {
+		await sourceItem.update({ "system.quantity": newQuantity });
+	}
+
+	const newItemData = sourceItem.toObject();
+	newItemData.system.quantity = quantity;
+	newItemData.system.equipped.carryType = "worn";
+	if ("invested" in newItemData.system.equipped) {
+		newItemData.system.equipped.invested = sourceItem.traits.has("invested")
+			? false
+			: null;
+	}
+
+	await targetActor.addToInventory(newItemData, container, newStack);
+}

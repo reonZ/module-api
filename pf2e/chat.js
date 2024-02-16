@@ -262,7 +262,6 @@ export function onClickShieldBlock(target, shieldButton, messageEl) {
 						return true;
 					}
 
-					console.log("end of before", shieldButton);
 					// Normal toggle behaviour. Tooltip is suppressed.
 					shieldButton.classList.toggle("shield-activated");
 					CONFIG.PF2E.chatDamageButtonShieldToggle =
