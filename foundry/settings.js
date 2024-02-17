@@ -42,6 +42,14 @@ export function getSetting(setting) {
 }
 
 /**
+ * @param {string} setting
+ * @returns {boolean}
+ */
+export function isChoiceSetting(setting) {
+	return !!game.settings.settings.get(`${MODULE.id}.${setting}`)?.choices;
+}
+
+/**
  * @template T
  * @param {string} setting
  * @param {T} value

@@ -22,6 +22,11 @@ export function settingPath(setting: string, key: string): string;
  */
 export function getSetting(setting: string): unknown;
 /**
+ * @param {string} setting
+ * @returns {boolean}
+ */
+export function isChoiceSetting(setting: string): boolean;
+/**
  * @template T
  * @param {string} setting
  * @param {T} value
