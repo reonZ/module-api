@@ -21,6 +21,20 @@ export function setInMemory(doc, ...args) {
 
 /**
  * @param {object} doc
+ * @param  {(string|unknown)[]} args
+ * @returns {unknown}
+ */
+export function getInMemoryAndSetIfNot(doc, ...args) {
+	const value = args.splice(-1)[0];
+	const current = getInMemory(doc, ...args);
+	if (current != null) return current;
+	const result = typeof value === "function" ? value() : value;
+	setInMemory(doc, ...args, result);
+	return result;
+}
+
+/**
+ * @param {object} doc
  * @param {string[]} path
  * @returns {boolean}
  */

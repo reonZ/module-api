@@ -12,6 +12,12 @@ export function getInMemory(doc: object, ...path: string[]): unknown;
 export function setInMemory(doc: object, ...args: (string | unknown)[]): boolean;
 /**
  * @param {object} doc
+ * @param  {(string|unknown)[]} args
+ * @returns {unknown}
+ */
+export function getInMemoryAndSetIfNot(doc: object, ...args: (string | unknown)[]): unknown;
+/**
+ * @param {object} doc
  * @param {string[]} path
  * @returns {boolean}
  */
