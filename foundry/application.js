@@ -1,11 +1,10 @@
 /**
- * @param {unknown} actor
+ * @param {string} actorType
  */
-export function refreshCharacterSheets(actor) {
-	for (const win of Object.values(ui.windows)) {
-		const winActor = win.actor;
-		if (!(win instanceof ActorSheet) || !winActor.isOfType("character"))
-			continue;
-		if (!actor || actor === winActor) win.render();
+export function refreshActorSheets(actorType) {
+	for (const app of Object.values(ui.windows)) {
+		if (app instanceof ActorSheet && app.actor?.type === actorType) {
+			app.render();
+		}
 	}
 }

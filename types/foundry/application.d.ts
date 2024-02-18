@@ -1,4 +1,4 @@
 /**
- * @param {unknown} actor
+ * @param {string} actorType
  */
-export function refreshCharacterSheets(actor: unknown): void;
+export function refreshActorSheets(actorType: string): void;
