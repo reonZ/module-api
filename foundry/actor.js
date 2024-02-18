@@ -11,7 +11,7 @@ export function getOwner(actor) {
 
 	if (!owners.length) {
 		owners = game.users.filter(
-			(user) => isValidUser(user) && doc.testUserPermission(user, "OWNER"),
+			(user) => isValidUser(user) && actor.testUserPermission(user, "OWNER"),
 		);
 	}
 
