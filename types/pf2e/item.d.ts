@@ -56,4 +56,37 @@ export function isHandwrapsOfMightyBlows(item: object): boolean;
  * @returns {Coins}
  */
 export function calculateItemPrice(item: Item, quantity?: number, ratio?: number): Coins;
+/**
+ * @param {Actor} target
+ * @param {Item} item
+ * @param {number} quantity
+ * @param {string} [containerId]
+ * @param {boolean} [newStack]
+ * @returns {Promise<Item>}
+ */
+export function transferItemToActor(target: Actor, item: Item, quantity: number, containerId?: string, newStack?: boolean): Promise<Item>;
 export const HANDWRAPS_SLUG: "handwraps-of-mighty-blows";
+export class MoveLootPopup {
+    static get defaultOptions(): any;
+    /**
+     * @param {Actor} object
+     * @param {object} options
+     * @param {{default: number, max: number}} options.quantity
+     * @param {boolean} options.newStack
+     * @param {boolean} options.lockStack
+     * @param {boolean} options.isPurchase
+     * @param {(quantity: number, newStack: boolean) => void} callback
+     */
+    constructor(object: Actor, options: {
+        quantity: {
+            default: number;
+            max: number;
+        };
+        newStack: boolean;
+        lockStack: boolean;
+        isPurchase: boolean;
+    }, callback: (quantity: number, newStack: boolean) => void);
+    onSubmitCallback: (quantity: number, newStack: boolean) => void;
+    getData(): Promise<any>;
+    _updateObject(_event: any, formData: any): Promise<void>;
+}
