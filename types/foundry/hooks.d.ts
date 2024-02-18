@@ -1,6 +1,6 @@
 /**
- * @param {string} hook
- * @param {Functionn} fn
+ * @param {string} event
+ * @param {Functionn} listener
  * @returns {number}
  */
-export function registerUpstreamHook(hook: string, fn: Functionn): number;
+export function registerUpstreamHook(event: string, listener: Functionn): number;
