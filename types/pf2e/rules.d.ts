@@ -29,11 +29,11 @@ export function extractNotes(rollNotes: object, selectors: string[]): object[];
  * @param {object} options
  * @returns {object[]}
  */
-export function extractDamageDice(deferredDice: object, selectors: string[], options: object): object[];
+export function extractDamageDice(synthetics: any, options: object): object[];
 /**
  * @param {object} synthetics
  * @param {string[]} selectors
  * @param {object} options
  * @returns {object[]}
  */
-export function extractModifiers(synthetics: object, selectors: string[], options: object): object[];
+export function extractModifiers(synthetics: object, selectors: string[], options?: object): object[];

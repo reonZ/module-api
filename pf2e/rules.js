@@ -1,3 +1,5 @@
+import * as R from "remeda";
+
 /**
  * @param {object} options
  * @param {string} options.affects
@@ -57,9 +59,9 @@ export function extractNotes(rollNotes, selectors) {
  * @param {object} options
  * @returns {object[]}
  */
-export function extractDamageDice(deferredDice, selectors, options) {
-	return selectors
-		.flatMap((s) => deferredDice[s] ?? [])
+export function extractDamageDice(synthetics, options) {
+	return options.selectors
+		.flatMap((s) => synthetics[s] ?? [])
 		.flatMap((d) => d(options) ?? []);
 }
 
@@ -69,31 +71,40 @@ export function extractDamageDice(deferredDice, selectors, options) {
  * @param {object} options
  * @returns {object[]}
  */
-export function extractModifiers(synthetics, selectors, options) {
-	const { modifierAdjustments, modifiers: syntheticModifiers } = synthetics;
-	const modifiers = Array.from(new Set(selectors))
-		.flatMap((s) => syntheticModifiers[s] ?? [])
+export function extractModifiers(synthetics, selectors, options = {}) {
+	const domains = R.uniq(selectors);
+	const modifiers = domains
+		.flatMap((s) => synthetics.modifiers[s] ?? [])
 		.flatMap((d) => d(options) ?? []);
 	for (const modifier of modifiers) {
+		modifier.domains = [...domains];
 		modifier.adjustments = extractModifierAdjustments(
-			modifierAdjustments,
-			selectors,
+			synthetics.modifierAdjustments,
+			domains,
 			modifier.slug,
 		);
+		if (domains.some((s) => s.endsWith("damage"))) {
+			modifier.alterations = extractDamageAlterations(
+				synthetics.damageAlterations,
+				domains,
+				modifier.slug,
+			);
+		}
 	}
 
 	return modifiers;
 }
 
-/**
- * @param {object} adjustmentsRecord
- * @param {string[]} selectors
- * @param {string} slug
- * @returns {object[]}
- */
+function extractDamageAlterations(alterationsRecord, selectors, slug) {
+	const alterations = R.uniq(
+		selectors.flatMap((s) => alterationsRecord[s] ?? []),
+	);
+	return alterations.filter((a) => [slug, null].includes(a.slug));
+}
+
 function extractModifierAdjustments(adjustmentsRecord, selectors, slug) {
-	const adjustments = Array.from(
-		new Set(selectors.flatMap((s) => adjustmentsRecord[s] ?? [])),
+	const adjustments = R.uniq(
+		selectors.flatMap((s) => adjustmentsRecord[s] ?? []),
 	);
 	return adjustments.filter((a) => [slug, null].includes(a.slug));
 }

@@ -6,7 +6,6 @@ import {
 	extractDamageDice,
 	extractEphemeralEffects,
 	extractModifiers,
-	extractNotes,
 } from "./rules";
 
 /**
@@ -126,14 +125,11 @@ export async function applyDamageFromMessage({
 				return {};
 			})();
 
-			const damageDice = extractDamageDice(
-				contextClone.synthetics.damageDice,
-				[domain],
-				{
-					resolvables,
-					test: applicationRollOptions,
-				},
-			).filter(
+			const damageDice = extractDamageDice(contextClone.synthetics.damageDice, {
+				selectors: [domain],
+				resolvables,
+				test: applicationRollOptions,
+			}).filter(
 				(d) =>
 					(d.critical === null || d.critical === critical) &&
 					d.predicate.test(applicationRollOptions),
@@ -177,18 +173,6 @@ export async function applyDamageFromMessage({
 			);
 		}
 
-		const hasDamageOrHealing =
-			typeof damage === "number" ? damage !== 0 : damage.total !== 0;
-		const notes = hasDamageOrHealing
-			? extractNotes(contextClone.synthetics.rollNotes, [domain]).filter(
-					(n) =>
-						(!outcome ||
-							n.outcome.length === 0 ||
-							n.outcome.includes(outcome)) &&
-						n.predicate.test(applicationRollOptions),
-			  )
-			: [];
-
 		await contextClone.applyDamage({
 			damage,
 			token,
@@ -197,7 +181,7 @@ export async function applyDamageFromMessage({
 			rollOptions: applicationRollOptions,
 			shieldBlockRequest,
 			breakdown,
-			notes,
+			outcome,
 		});
 	}
 	toggleOffShieldBlock(message.id);
@@ -325,7 +309,6 @@ export function onClickShieldBlock(target, shieldButton, messageEl) {
  * @param {string} messageId
  */
 export function toggleOffShieldBlock(messageId) {
-	console.trace("toggleOffShieldBlock");
 	for (const app of ["#chat-log", "#chat-popout"]) {
 		const selector = `${app} > li.chat-message[data-message-id="${messageId}"] button[data-action$=shield-block]`;
 		for (const button of document.body.querySelectorAll(selector)) {
