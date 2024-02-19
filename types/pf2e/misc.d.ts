@@ -51,7 +51,7 @@ export function getActionIcon(action: string | {
  * @param {boolean|null} [options.camel]
  * @returns {string}
  */
-export function sluggify(text: string, { camel }?: {
+export function sluggify(text: string, options?: {
     camel?: boolean | null;
 }): string;
 /**
