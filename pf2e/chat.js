@@ -495,7 +495,7 @@ export function createTradeContent(message, img) {
  * @param {foundry.Document|string} docOrUuid
  * @param {object} [options]
  * @param {boolean} [options.async]
- * @param {boolean} [options.label]
+ * @param {string} [options.label]
  * @returns {Promise<string>}
  */
 export function createFancyLink(docOrUuid, { async = true, label } = {}) {
