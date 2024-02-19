@@ -35,6 +35,15 @@ export function localizer(prefix: string): (...args: (string | Record<string, un
  * @returns {string}
  */
 export function getActionGlyph(action: typeof actionGlyphMap): string;
+/**
+ * @param {string} text
+ * @param {object} [options]
+ * @param {boolean|null} [options.camel]
+ * @returns {string}
+ */
+export function sluggify(text: string, { camel }?: {
+    camel?: boolean | null;
+}): string;
 declare const actionGlyphMap: {
     0: string;
     free: string;
