@@ -1,3 +1,6 @@
+import { createHTMLElement } from "./html";
+import { ErrorPF2e, localizer } from "./misc";
+
 export const HANDWRAPS_SLUG = "handwraps-of-mighty-blows";
 
 /**
@@ -223,4 +226,43 @@ export class MoveLootPopup extends FormApplication {
 	async _updateObject(_event, formData) {
 		this.onSubmitCallback(formData.quantity, formData.newStack);
 	}
+}
+
+export async function detachSubitem(subitem, skipConfirm) {
+	const parentItem = subitem.parentItem;
+	if (!parentItem) throw ErrorPF2e("Subitem has no parent item");
+
+	const localize = localizer("PF2E.Item.Physical.Attach.Detach");
+	const confirmed =
+		skipConfirm ||
+		(await Dialog.confirm({
+			title: localize("Label"),
+			content: createHTMLElement("p", {
+				children: [localize("Prompt", { attachable: subitem.name })],
+			}).outerHTML,
+		}));
+	if (!confirmed) return;
+
+	const deletePromise = subitem.delete();
+	const createPromise = (async () => {
+		// Find a stack match, cloning the subitem as worn so the search won't fail due to it being equipped
+		const stack = subitem.isOfType("consumable")
+			? parentItem.actor?.inventory.findStackableItem(
+					subitem.clone({ "system.equipped.carryType": "worn" }),
+			  )
+			: null;
+		const keepId =
+			!!parentItem.actor && !parentItem.actor.items.has(subitem.id);
+		return (
+			stack?.update({ "system.quantity": stack.quantity + 1 }) ??
+			Item.implementation.create(
+				mergeObject(subitem.toObject(), {
+					"system.containerId": parentItem.system.containerId,
+				}),
+				{ parent: parentItem.actor, keepId },
+			)
+		);
+	})();
+
+	await Promise.all([deletePromise, createPromise]);
 }
