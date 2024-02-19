@@ -2,8 +2,6 @@ import { MODULE } from ".";
 import { arrayToObject } from "../utils/array";
 
 /**
- * Register a foundry setting
- *
  * @template {number | boolean | string} T
  * @param { {key: string, type: new (...args: unknkown[]) => T, default: T, [k: string]: unknown }} options
  */
@@ -24,13 +22,24 @@ export function registerSetting(options) {
 	game.settings.register(MODULE.id, options.key, options);
 }
 
+export function registerSettingMenu(options) {
+	options.key ??= options.name;
+
+	options.name = settingPath("menus", options.key, "name");
+	options.label = settingPath("menus", options.key, "label");
+	options.hint = settingPath("menus", options.key, "hint");
+	options.restricted ??= true;
+	options.icon ??= "fas fa-cogs";
+
+	game.settings.registerMenu(MODULE.id, options.key, options);
+}
+
 /**
- * @param {string} setting
- * @param {string} key
+ * @param {string[]} path
  * @returns
  */
-export function settingPath(setting, key) {
-	return `${MODULE.id}.settings.${setting}.${key}`;
+export function settingPath(...path) {
+	return `${MODULE.id}.settings.${path.join(".")}`;
 }
 
 /**

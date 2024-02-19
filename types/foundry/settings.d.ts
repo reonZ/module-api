@@ -1,6 +1,4 @@
 /**
- * Register a foundry setting
- *
  * @template {number | boolean | string} T
  * @param { {key: string, type: new (...args: unknkown[]) => T, default: T, [k: string]: unknown }} options
  */
@@ -10,12 +8,12 @@ export function registerSetting<T extends string | number | boolean>(options: {
     type: new (...args: unknkown[]) => T;
     default: T;
 }): void;
+export function registerSettingMenu(options: any): void;
 /**
- * @param {string} setting
- * @param {string} key
+ * @param {string[]} path
  * @returns
  */
-export function settingPath(setting: string, key: string): string;
+export function settingPath(...path: string[]): string;
 /**
  * @param {string} setting
  * @returns {unknown}
