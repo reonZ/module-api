@@ -1,30 +1,4 @@
-/**
- * @param {object} item
- * @returns {string}
- */
-function getSourceId(item) {
-	return item.getFlag("core", "sourceId");
-}
-
-/**
- * @param {object} item
- * @param {string[]} list
- * @returns {boolean}
- */
-function includesSourceId(item, list) {
-	const sourceId = getSourceId(item);
-	return sourceId ? list.includes(sourceId) : false;
-}
-
-/**
- * @param {string|string[]} sourceId
- * @returns {(item: object) => boolean}
- */
-function getItemSourceIdCondition(sourceId) {
-	return Array.isArray(sourceId)
-		? (item) => includesSourceId(item, sourceId)
-		: (item) => getSourceId(item) === sourceId;
-}
+import { getSourceIdCondition } from "./document";
 
 /**
  *
@@ -46,7 +20,7 @@ export function getItems(actor, itemTypes = []) {
  * @returns {boolean}
  */
 export function hasItemWithSourceId(actor, sourceId, itemTypes) {
-	return getItems(actor, itemTypes).some(getItemSourceIdCondition(sourceId));
+	return getItems(actor, itemTypes).some(getSourceIdCondition(sourceId));
 }
 
 /**
@@ -56,5 +30,5 @@ export function hasItemWithSourceId(actor, sourceId, itemTypes) {
  * @returns {object} item
  */
 export function getItemWithSourceId(actor, sourceId, itemTypes) {
-	return getItems(actor, itemTypes).find(getItemSourceIdCondition(sourceId));
+	return getItems(actor, itemTypes).find(getSourceIdCondition(sourceId));
 }

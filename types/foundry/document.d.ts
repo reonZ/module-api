@@ -32,3 +32,19 @@ export function updateDocument({ doc, updates, message }: {
     doc: FoundryDocument;
     updates?: Record<string, unknown>;
 }, userId: any): Promise<void>;
+/** *
+ * @param {foundry.Document} doc
+ * @returns {string|undefined}
+ */
+export function getSourceId(doc: foundry.Document): string | undefined;
+/**
+ * @param {foundry.Document} doc
+ * @param {string|} list
+ * @returns {boolean}
+ */
+export function includesSourceId(doc: foundry.Document, list: string | any): boolean;
+/**
+ * @param {string|string[]} sourceId
+ * @returns {(item: object) => boolean}
+ */
+export function getSourceIdCondition(sourceId: string | string[]): (item: object) => boolean;

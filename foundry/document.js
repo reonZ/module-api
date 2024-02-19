@@ -76,3 +76,31 @@ export async function updateDocument({ doc, updates, message }, userId) {
 		ChatMessage.implementation.create(message);
 	}
 }
+
+/** *
+ * @param {foundry.Document} doc
+ * @returns {string|undefined}
+ */
+export function getSourceId(doc) {
+	return doc.getFlag("core", "sourceId");
+}
+
+/**
+ * @param {foundry.Document} doc
+ * @param {string|} list
+ * @returns {boolean}
+ */
+export function includesSourceId(doc, list) {
+	const sourceId = getSourceId(doc);
+	return sourceId ? list.includes(sourceId) : false;
+}
+
+/**
+ * @param {string|string[]} sourceId
+ * @returns {(item: object) => boolean}
+ */
+export function getSourceIdCondition(sourceId) {
+	return Array.isArray(sourceId)
+		? (item) => includesSourceId(item, sourceId)
+		: (item) => getSourceId(item) === sourceId;
+}
