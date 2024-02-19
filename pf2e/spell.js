@@ -1,3 +1,10 @@
+export const MAGIC_TRADITIONS = new Set([
+	"arcane",
+	"divine",
+	"occult",
+	"primal",
+]);
+
 /**
  * @param {string} groupId
  * @returns {number|null}
