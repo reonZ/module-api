@@ -47,3 +47,20 @@ export function compareArrays(arr1, arr2) {
 export function indexIsValid(index) {
 	return index !== undefined && index !== -1;
 }
+
+/**
+ * @param {number} start
+ * @param {number} end
+ * @returns {number[]}
+ */
+export function sequenceArray(start, end) {
+	const levels = [];
+
+	if (start <= end) {
+		for (let i = start; i <= end; i++) levels.push(i);
+	} else {
+		for (let i = start; i >= end; i--) levels.push(i);
+	}
+
+	return levels;
+}

@@ -19,3 +19,9 @@ export function compareArrays(arr1: unknown[], arr2: unknown[]): boolean;
  * @returns {boolean}
  */
 export function indexIsValid(index: number | undefined): boolean;
+/**
+ * @param {number} start
+ * @param {number} end
+ * @returns {number[]}
+ */
+export function sequenceArray(start: number, end: number): number[];
