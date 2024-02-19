@@ -53,3 +53,14 @@ export function signedInteger(
 export function objectHasKey(obj, key) {
 	return (typeof key === "string" || typeof key === "number") && key in obj;
 }
+
+/**
+ * @param {string} prefix
+ * @returns {(...args: (string|Record<string, unknown>)[]) => string}
+ */
+export function localizer(prefix) {
+	return (...[suffix, formatArgs]) =>
+		formatArgs
+			? game.i18n.format(`${prefix}.${suffix}`, formatArgs)
+			: game.i18n.localize(`${prefix}.${suffix}`);
+}

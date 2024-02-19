@@ -25,3 +25,8 @@ export function signedInteger(value: number, { emptyStringZero, zeroIsNegative }
  * @returns {boolean}
  */
 export function objectHasKey(obj: object, key: unknown): boolean;
+/**
+ * @param {string} prefix
+ * @returns {(...args: (string|Record<string, unknown>)[]) => string}
+ */
+export function localizer(prefix: string): (...args: (string | Record<string, unknown>)[]) => string;
