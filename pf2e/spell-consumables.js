@@ -1,7 +1,8 @@
 import * as R from "remeda";
 import { calculateDC } from "./dc";
 import { ErrorPF2e, setHasElement } from "./misc";
-import { traditionSkills } from "./spell";
+import { MAGIC_TRADITIONS, traditionSkills } from "./spell";
+import { isInstanceOf } from "../utils";
 
 /**
  * @typedef {"scroll" | "wand" | "cantripDeck5"} SpellConsumableItemType
@@ -68,16 +69,26 @@ export function calculateTrickMagicItemCheckDC(
  * @param {SpellConsumableItemType} options.type
  * @param {number} [options.heightenedLevel]
  * @param {boolean} [options.mystified]
+ * @param {boolean} [options.temp]
+ * @param {string} [options.itemImg]
+ * @param {string} [options.itemName]
  * @returns {Promise<ConsumableSource>}
  */
 export async function createConsumableFromSpell(
 	spell,
-	{ type, heightenedLevel = spell.baseRank, mystified = false },
+	{
+		type,
+		heightenedLevel = spell.baseRank,
+		mystified = false,
+		temp = false,
+		itemImg,
+		itemName = type,
+	},
 ) {
 	const pack = game.packs.find((p) => p.collection === "pf2e.equipment-srd");
 	const itemId = getIdForSpellConsumable(type, heightenedLevel);
 	const consumable = await pack?.getDocument(itemId ?? "");
-	if (!(consumable instanceof ConsumablePF2e)) {
+	if (!isInstanceOf(consumable, "ConsumablePF2e")) {
 		throw ErrorPF2e("Failed to retrieve consumable item");
 	}
 
@@ -95,7 +106,7 @@ export async function createConsumableFromSpell(
 	traits.value.sort();
 
 	consumableSource.name = getNameForSpellConsumable(
-		type,
+		itemName,
 		spell.name,
 		heightenedLevel,
 	);
@@ -132,6 +143,14 @@ export async function createConsumableFromSpell(
 
 	if (mystified) {
 		consumableSource.system.identification.status = "unidentified";
+	}
+
+	if (typeof itemImg === "string") {
+		consumableSource.img = itemImg;
+	}
+
+	if (temp) {
+		consumableSource.system.temporary = true;
 	}
 
 	return consumableSource;
