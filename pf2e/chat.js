@@ -492,12 +492,22 @@ export function createTradeContent(message, img) {
 }
 
 /**
- * @param {foundry.Document} doc
- * @param {boolean} [async]
+ * @param {foundry.Document|string} docOrUuid
+ * @param {object} [options]
+ * @param {boolean} [options.async]
+ * @param {boolean} [options.label]
  * @returns {Promise<string>}
  */
-export function createFancyLink(doc, async = true) {
-	return TextEditor.enrichHTML(doc.link, { async });
+export function createFancyLink(docOrUuid, { async = true, label } = {}) {
+	let link =
+		docOrUuid instanceof foundry.abstract.Document
+			? docOrUuid.link
+			: `@UUID[${docOrUuid}]`;
+	if (label) {
+		link = link.replace(/\{.+?\}$/, "");
+		link = `${link}{${label}}`;
+	}
+	return TextEditor.enrichHTML(link, { async });
 }
 
 /**

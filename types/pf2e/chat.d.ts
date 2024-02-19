@@ -48,11 +48,16 @@ export function createManipulateFlavor(subtitle: string): Promise<string>;
  */
 export function createTradeContent(message: string, img: string): Promise<string>;
 /**
- * @param {foundry.Document} doc
- * @param {boolean} [async]
+ * @param {foundry.Document|string} docOrUuid
+ * @param {object} [options]
+ * @param {boolean} [options.async]
+ * @param {boolean} [options.label]
  * @returns {Promise<string>}
  */
-export function createFancyLink(doc: foundry.Document, async?: boolean): Promise<string>;
+export function createFancyLink(docOrUuid: foundry.Document | string, { async, label }?: {
+    async?: boolean;
+    label?: boolean;
+}): Promise<string>;
 /**
  *
  * @param {string} subtitle
