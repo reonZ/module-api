@@ -49,7 +49,7 @@ export class PredicatePF2e extends Array {
 	}
 
 	toObject() {
-		return fu.deepClone([...this]);
+		return deepClone([...this]);
 	}
 
 	clone() {
