@@ -7,6 +7,7 @@ export * from "./html";
 export * from "./identify";
 export * from "./item";
 export * from "./misc";
+export * from "./predicate";
 export * from "./rules";
 export * from "./scripts";
 export * from "./spell";

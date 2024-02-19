@@ -68,6 +68,11 @@ export function setHasElement<T>(set: Set<T>, value: T): boolean;
  * @returns {boolean}
  */
 export function tupleHasValue<T>(array: [T, T], value: T): boolean;
+/**
+ * @param {unknown} value
+ * @returns {boolean}
+ */
+export function isObject(value: unknown): boolean;
 declare const actionGlyphMap: {
     0: string;
     free: string;

@@ -214,3 +214,11 @@ export function setHasElement(set, value) {
 export function tupleHasValue(array, value) {
 	return array.includes(value);
 }
+
+/**
+ * @param {unknown} value
+ * @returns {boolean}
+ */
+export function isObject(value) {
+	return typeof value === "object" && value !== null;
+}
