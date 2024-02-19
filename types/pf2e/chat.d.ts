@@ -53,4 +53,23 @@ export function createTradeContent(message: string, img: string): Promise<string
  * @returns {Promise<string>}
  */
 export function createFancyLink(doc: foundry.Document, async?: boolean): Promise<string>;
+/**
+ *
+ * @param {string} subtitle
+ * @param {string} content
+ * @param {Actor} actor
+ * @param {string} [senderId]
+ * @returns {Promise<ChatMessage>}
+ */
+export function createManipulationMessage(subtitle: string, content: string, actor: Actor, senderId?: string): Promise<ChatMessage>;
+/**
+ *
+ * @param {string} subtitle
+ * @param {string} message
+ * @param {Actor} actor
+ * @param {Item} item
+ * @param {string} [senderId]
+ * @returns {Promise<ChatMessage>}
+ */
+export function createTradeMessage(subtitle: string, message: string, actor: Actor, item: Item, senderId?: string): Promise<ChatMessage>;
 export type OnDamageApplied = (message: object, tokens: object[], rollIndex: number) => void;

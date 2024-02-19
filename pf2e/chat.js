@@ -1,3 +1,4 @@
+import { getHighestName } from "../foundry";
 import { isInstanceOf } from "../utils";
 import { applyStackingRules } from "./actor";
 import { htmlQuery } from "./html";
@@ -497,4 +498,50 @@ export function createTradeContent(message, img) {
  */
 export function createFancyLink(doc, async = true) {
 	return TextEditor.enrichHTML(doc.link, { async });
+}
+
+/**
+ *
+ * @param {string} subtitle
+ * @param {string} content
+ * @param {Actor} actor
+ * @param {string} [senderId]
+ * @returns {Promise<ChatMessage>}
+ */
+export async function createManipulationMessage(
+	subtitle,
+	content,
+	actor,
+	senderId,
+) {
+	return ChatMessage.implementation.create({
+		user: senderId ?? game.user.id,
+		speaker: ChatMessage.getSpeaker({
+			actor,
+			alias: getHighestName(actor),
+		}),
+		flavor: await createManipulateFlavor(subtitle),
+		content: content,
+		type: CONST.CHAT_MESSAGE_TYPES.EMOTE,
+	});
+}
+
+/**
+ *
+ * @param {string} subtitle
+ * @param {string} message
+ * @param {Actor} actor
+ * @param {Item} item
+ * @param {string} [senderId]
+ * @returns {Promise<ChatMessage>}
+ */
+export async function createTradeMessage(
+	subtitle,
+	message,
+	actor,
+	item,
+	senderId,
+) {
+	const content = await createTradeContent(message, item.img);
+	return createManipulationMessage(subtitle, content, actor, senderId);
 }
