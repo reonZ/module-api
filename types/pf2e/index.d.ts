@@ -11,6 +11,7 @@ export * from "./predicate";
 export * from "./rules";
 export * from "./scripts";
 export * from "./spell";
+export * from "./spell-consumables";
 export * from "./success";
 export * from "./tags";
 export * from "./template";

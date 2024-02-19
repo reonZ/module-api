@@ -5,6 +5,13 @@ export const MAGIC_TRADITIONS = new Set([
 	"primal",
 ]);
 
+export const traditionSkills = {
+	arcane: "arcana",
+	divine: "religion",
+	occult: "occultism",
+	primal: "nature",
+};
+
 /**
  * @param {string} groupId
  * @returns {number|null}
