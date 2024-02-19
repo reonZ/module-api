@@ -1,3 +1,20 @@
+export namespace DEGREE_OF_SUCCESS {
+    let CRITICAL_SUCCESS: number;
+    let SUCCESS: number;
+    let FAILURE: number;
+    let CRITICAL_FAILURE: number;
+}
+export namespace DEGREE_ADJUSTMENT_AMOUNTS {
+    let LOWER_BY_TWO: number;
+    let LOWER: number;
+    let INCREASE: number;
+    let INCREASE_BY_TWO: number;
+    let TO_CRITICAL_FAILURE: string;
+    let TO_FAILURE: string;
+    let TO_SUCCESS: string;
+    let TO_CRITICAL_SUCCESS: string;
+}
+export const DEGREE_OF_SUCCESS_STRINGS: string[];
 /**
  * @class
  * @constructor

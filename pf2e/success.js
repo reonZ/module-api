@@ -1,4 +1,11 @@
-const DEGREE_ADJUSTMENT_AMOUNTS = {
+export const DEGREE_OF_SUCCESS = {
+	CRITICAL_SUCCESS: 3,
+	SUCCESS: 2,
+	FAILURE: 1,
+	CRITICAL_FAILURE: 0,
+};
+
+export const DEGREE_ADJUSTMENT_AMOUNTS = {
 	LOWER_BY_TWO: -2,
 	LOWER: -1,
 	INCREASE: 1,
@@ -9,7 +16,7 @@ const DEGREE_ADJUSTMENT_AMOUNTS = {
 	TO_CRITICAL_SUCCESS: "criticalSuccess",
 };
 
-const DEGREE_OF_SUCCESS_STRINGS = [
+export const DEGREE_OF_SUCCESS_STRINGS = [
 	"criticalFailure",
 	"failure",
 	"success",
