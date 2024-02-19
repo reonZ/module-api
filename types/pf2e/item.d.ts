@@ -66,6 +66,7 @@ export function calculateItemPrice(item: Item, quantity?: number, ratio?: number
  */
 export function transferItemToActor(target: Actor, item: Item, quantity: number, containerId?: string, newStack?: boolean): Promise<Item>;
 export function detachSubitem(subitem: any, skipConfirm: any): Promise<void>;
+export function unownedItemToMessage(event: any, item: any, actor: any, options?: {}): Promise<any>;
 export const HANDWRAPS_SLUG: "handwraps-of-mighty-blows";
 export class MoveLootPopup {
     static get defaultOptions(): any;

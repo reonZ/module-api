@@ -1,5 +1,6 @@
-import { createHTMLElement } from "./html";
-import { ErrorPF2e, localizer } from "./misc";
+import { createHTMLElement, htmlClosest } from "./html";
+import { ErrorPF2e, localizer, sluggify } from "./misc";
+import { eventToRollMode } from "./scripts";
 
 export const HANDWRAPS_SLUG = "handwraps-of-mighty-blows";
 
@@ -265,4 +266,43 @@ export async function detachSubitem(subitem, skipConfirm) {
 	})();
 
 	await Promise.all([deletePromise, createPromise]);
+}
+
+export async function unownedItemToMessage(event, item, actor, options = {}) {
+	const ChatMessagePF2e = ChatMessage.implementation;
+
+	// Basic template rendering data
+	const type = sluggify(item.type);
+	const template = `systems/pf2e/templates/chat/${type}-card.hbs`;
+	const token = actor.token;
+	const nearestItem = htmlClosest(event?.target, ".item");
+	const rollOptions = options.data ?? { ...(nearestItem?.dataset ?? {}) };
+	const templateData = {
+		actor: actor,
+		tokenId: token ? `${token.parent?.id}.${token.id}` : null,
+		item: item,
+		data: await item.getChatData(undefined, rollOptions),
+	};
+
+	// Basic chat message data
+	const originalEvent =
+		event instanceof MouseEvent ? event : event?.originalEvent;
+	const rollMode = options.rollMode ?? eventToRollMode(originalEvent);
+	const chatData = ChatMessagePF2e.applyRollMode(
+		{
+			type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+			speaker: ChatMessagePF2e.getSpeaker({
+				actor: this.actor,
+				token: this.actor.getActiveTokens(false, true).at(0),
+			}),
+			content: await renderTemplate(template, templateData),
+			flags: { pf2e: { origin: this.getOriginData() } },
+		},
+		rollMode,
+	);
+
+	// Create the chat message
+	return options.create ?? true
+		? ChatMessagePF2e.create(chatData, { rollMode, renderSheet: false })
+		: new ChatMessagePF2e(chatData, { rollMode });
 }
