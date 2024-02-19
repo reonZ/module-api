@@ -1,3 +1,5 @@
+export const AsyncFunction = (async () => {}).constructor;
+
 /**
  * @param {object} obj
  * @param {string} name

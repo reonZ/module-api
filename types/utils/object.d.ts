@@ -4,3 +4,4 @@
  * @returns {boolean}
  */
 export function isInstanceOf(obj: object, name: string): boolean;
+export const AsyncFunction: Function;
