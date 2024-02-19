@@ -29,11 +29,10 @@ export function* latestChatMessages(nb, fromMessage) {
 /**
  * @param {string} uuid
  * @param {string} [label]
- * @param {boolean} [fake]
  * @returns {string}
  */
-export function chatUUID(uuid, label, fake = false) {
-	if (fake) {
+export function chatUUID(uuid, label) {
+	if (!uuid) {
 		return `<span style="background: #DDD; padding: 1px 4px; border: 1px solid var(--color-border-dark-tertiary);
 border-radius: 2px; white-space: nowrap; word-break: break-all;">${label}</span>`;
 	}

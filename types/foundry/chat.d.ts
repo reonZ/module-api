@@ -12,10 +12,9 @@ export function latestChatMessages<T>(nb: number, fromMessage?: T): {
 /**
  * @param {string} uuid
  * @param {string} [label]
- * @param {boolean} [fake]
  * @returns {string}
  */
-export function chatUUID(uuid: string, label?: string, fake?: boolean): string;
+export function chatUUID(uuid: string, label?: string): string;
 /**
  * @param {object} message
  * @returns {string}
