@@ -384,6 +384,11 @@ async function shiftAdjustDamage({
 	}).render(true);
 }
 
+/**
+ * @param {Item} item
+ * @param {string} rollMode
+ * @returns {ChatMessage}
+ */
 export async function createSelfEffectMessage(item, rollMode = "roll") {
 	if (!item.system.selfEffect) {
 		throw ErrorPF2e(
@@ -450,4 +455,46 @@ export async function createSelfEffectMessage(item, rollMode = "roll") {
 	);
 
 	return ChatMessagePF2e.create(messageData);
+}
+
+/**
+ * @param {string} subtitle
+ * @returns {Promise<string>}
+ */
+export function createManipulateFlavor(subtitle) {
+	return renderTemplate("systems/pf2e/templates/chat/action/flavor.hbs", {
+		action: {
+			title: "PF2E.Actions.Interact.Title",
+			subtitle: subtitle,
+			glyph: getActionGlyph(1),
+		},
+		traits: [
+			{
+				name: "manipulate",
+				label: CONFIG.PF2E.featTraits.manipulate,
+				description: CONFIG.PF2E.traitsDescriptions.manipulate,
+			},
+		],
+	});
+}
+
+/**
+ * @param {string} message
+ * @param {string} img
+ * @returns {Promise<string>}
+ */
+export function createTradeContent(message, img) {
+	return renderTemplate("systems/pf2e/templates/chat/action/content.hbs", {
+		imgPath: img,
+		message: message.replace(/\b1 × /, ""),
+	});
+}
+
+/**
+ * @param {foundry.Document} doc
+ * @param {boolean} [async]
+ * @returns {Promise<string>}
+ */
+export function createFancyLink(doc, async = true) {
+	return TextEditor.enrichHTML(doc.link, { async });
 }

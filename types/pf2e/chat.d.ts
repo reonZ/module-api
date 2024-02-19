@@ -30,5 +30,27 @@ export function onClickShieldBlock(target: object, shieldButton: HTMLElement, me
  * @param {string} messageId
  */
 export function toggleOffShieldBlock(messageId: string): void;
-export function createSelfEffectMessage(item: any, rollMode?: string): Promise<any>;
+/**
+ * @param {Item} item
+ * @param {string} rollMode
+ * @returns {ChatMessage}
+ */
+export function createSelfEffectMessage(item: Item, rollMode?: string): ChatMessage;
+/**
+ * @param {string} subtitle
+ * @returns {Promise<string>}
+ */
+export function createManipulateFlavor(subtitle: string): Promise<string>;
+/**
+ * @param {string} message
+ * @param {string} img
+ * @returns {Promise<string>}
+ */
+export function createTradeContent(message: string, img: string): Promise<string>;
+/**
+ * @param {foundry.Document} doc
+ * @param {boolean} [async]
+ * @returns {Promise<string>}
+ */
+export function createFancyLink(doc: foundry.Document, async?: boolean): Promise<string>;
 export type OnDamageApplied = (message: object, tokens: object[], rollIndex: number) => void;
