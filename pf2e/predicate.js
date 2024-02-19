@@ -20,10 +20,7 @@ export class PredicatePF2e extends Array {
 
 	/** Is this an array of predicatation statements? */
 	static isArray(statements) {
-		return (
-			Array.isArray(statements) &&
-			statements.every((s) => StatementValidator.isStatement(s))
-		);
+		return Array.isArray(statements) && statements.every((s) => isStatement(s));
 	}
 
 	/** Test if the given predicate passes for the given list of options. */
@@ -60,10 +57,8 @@ export class PredicatePF2e extends Array {
 	#isTrue(statement, domain) {
 		return (
 			(typeof statement === "string" && domain.has(statement)) ||
-			(StatementValidator.isBinaryOp(statement) &&
-				this.#testBinaryOp(statement, domain)) ||
-			(StatementValidator.isCompound(statement) &&
-				this.#testCompound(statement, domain))
+			(isBinaryOp(statement) && this.#testBinaryOp(statement, domain)) ||
+			(isCompound(statement) && this.#testCompound(statement, domain))
 		);
 	}
 
