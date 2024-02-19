@@ -97,6 +97,42 @@ export function getActionGlyph(action) {
 	return actionGlyphMap[sanitized]?.replace("-", "–") ?? "";
 }
 
+const actionImgMap = {
+	0: "systems/pf2e/icons/actions/FreeAction.webp",
+	free: "systems/pf2e/icons/actions/FreeAction.webp",
+	1: "systems/pf2e/icons/actions/OneAction.webp",
+	2: "systems/pf2e/icons/actions/TwoActions.webp",
+	3: "systems/pf2e/icons/actions/ThreeActions.webp",
+	"1 or 2": "systems/pf2e/icons/actions/OneTwoActions.webp",
+	"1 to 3": "systems/pf2e/icons/actions/OneThreeActions.webp",
+	"2 or 3": "systems/pf2e/icons/actions/TwoThreeActions.webp",
+	reaction: "systems/pf2e/icons/actions/Reaction.webp",
+	passive: "systems/pf2e/icons/actions/Passive.webp",
+};
+
+/**
+ *
+ * @param {string | {type: string, value: 1|2|3|null} | null} action
+ * @param {string} [fallback]
+ * @returns {string|null}
+ */
+export function getActionIcon(
+	action,
+	fallback = "systems/pf2e/icons/actions/Empty.webp",
+) {
+	if (action === null) return actionImgMap.passive;
+	const value =
+		typeof action !== "object"
+			? action
+			: action.type === "action"
+			  ? action.value
+			  : action.type;
+	const sanitized = String(value ?? "")
+		.toLowerCase()
+		.trim();
+	return actionImgMap[sanitized] ?? fallback;
+}
+
 const wordCharacter = String.raw`[\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Join_Control}]`;
 const nonWordCharacter = String.raw`[^\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Join_Control}]`;
 const nonWordCharacterRE = new RegExp(nonWordCharacter, "gu");
@@ -157,4 +193,24 @@ export function sluggify(text, { camel = null } = {}) {
 		default:
 			throw ErrorPF2e("I don't think that's a real camel.");
 	}
+}
+
+/**
+ * @template T
+ * @param {Set<T>} set
+ * @param {T} value
+ * @returns {boolean}
+ */
+export function setHasElement(set, value) {
+	return set.has(value);
+}
+
+/**
+ * @template T
+ * @param {[T, T]} array
+ * @param {T} value
+ * @returns {boolean}
+ */
+export function tupleHasValue(array, value) {
+	return array.includes(value);
 }
