@@ -19,3 +19,9 @@ export function signedInteger(value: number, { emptyStringZero, zeroIsNegative }
     emptyStringZero?: boolean;
     zeroIsNegative?: boolean;
 }): string;
+/**
+ * @param {object} obj
+ * @param {unknown} key
+ * @returns {boolean}
+ */
+export function objectHasKey(obj: object, key: unknown): boolean;

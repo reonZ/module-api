@@ -44,3 +44,12 @@ export function signedInteger(
 
 	return intlNumberFormat.format(maybeNegativeZero);
 }
+
+/**
+ * @param {object} obj
+ * @param {unknown} key
+ * @returns {boolean}
+ */
+export function objectHasKey(obj, key) {
+	return (typeof key === "string" || typeof key === "number") && key in obj;
+}
