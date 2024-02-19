@@ -6,6 +6,7 @@ export * from "./html";
 export * from "./item";
 export * from "./misc";
 export * from "./rules";
+export * from "./scripts";
 export * from "./spell";
 export * from "./success";
 export * from "./tags";
