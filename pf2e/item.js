@@ -1,5 +1,5 @@
 import { createHTMLElement, htmlClosest } from "./html";
-import { ErrorPF2e, localizer, sluggify } from "./misc";
+import { ErrorPF2e, localizer, setHasElement, sluggify } from "./misc";
 import { eventToRollMode } from "./scripts";
 
 export const HANDWRAPS_SLUG = "handwraps-of-mighty-blows";
@@ -305,4 +305,20 @@ export async function unownedItemToMessage(event, item, actor, options = {}) {
 	return options.create ?? true
 		? ChatMessagePF2e.create(chatData, { rollMode, renderSheet: false })
 		: new ChatMessagePF2e(chatData, { rollMode });
+}
+
+/**
+ * @param {ItemOrSource} item
+ * @param  {...any: string[]} types
+ * @returns {boolean}
+ */
+export function itemIsOfType(item, ...types) {
+	return (
+		typeof item.name === "string" &&
+		types.some((t) =>
+			t === "physical"
+				? setHasElement(PHYSICAL_ITEM_TYPES, item.type)
+				: item.type === t,
+		)
+	);
 }
