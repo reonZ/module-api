@@ -1,12 +1,13 @@
 import { isInstanceOf } from "../utils";
 import { applyStackingRules } from "./actor";
 import { htmlQuery } from "./html";
-import { ErrorPF2e, signedInteger } from "./misc";
+import { ErrorPF2e, getActionGlyph, signedInteger } from "./misc";
 import {
 	extractDamageDice,
 	extractEphemeralEffects,
 	extractModifiers,
 } from "./rules";
+import { traitSlugToObject } from "./tags";
 
 /**
  * @typedef {(message: object, tokens: object[], rollIndex: number) => void} OnDamageApplied
@@ -381,4 +382,72 @@ async function shiftAdjustDamage({
 			toggleOffShieldBlock(message.id);
 		},
 	}).render(true);
+}
+
+export async function createSelfEffectMessage(item, rollMode = "roll") {
+	if (!item.system.selfEffect) {
+		throw ErrorPF2e(
+			[
+				"Only actions with self-applied effects can be passed to `ActorPF2e#useAction`.",
+				"Support will be expanded at a later time.",
+			].join(" "),
+		);
+	}
+
+	const { actor, actionCost } = item;
+	const token = actor.getActiveTokens(true, true).shift() ?? null;
+
+	const ChatMessagePF2e = ChatMessage.implementation;
+	const speaker = ChatMessagePF2e.getSpeaker({ actor, token });
+	const flavor = await renderTemplate(
+		"systems/pf2e/templates/chat/action/flavor.hbs",
+		{
+			action: { title: item.name, glyph: getActionGlyph(actionCost) },
+			item,
+			traits: item.system.traits.value.map((t) =>
+				traitSlugToObject(t, CONFIG.PF2E.actionTraits),
+			),
+		},
+	);
+
+	// Get a preview slice of the message
+	const previewLength = 100;
+	const descriptionPreview = (() => {
+		if (item.actor.pack) return null;
+		const tempDiv = document.createElement("div");
+		const documentTypes = [...CONST.DOCUMENT_LINK_TYPES, "Compendium", "UUID"];
+		const linkPattern = new RegExp(
+			`@(${documentTypes.join(
+				"|",
+			)})\\[([^#\\]]+)(?:#([^\\]]+))?](?:{([^}]+)})?`,
+			"g",
+		);
+		tempDiv.innerHTML = item.description.replace(
+			linkPattern,
+			(_match, ...args) => args[3],
+		);
+
+		return tempDiv.innerText.slice(0, previewLength);
+	})();
+	const description = {
+		full:
+			descriptionPreview && descriptionPreview.length < previewLength
+				? item.description
+				: null,
+		preview: descriptionPreview,
+	};
+	const content = await renderTemplate(
+		"systems/pf2e/templates/chat/action/self-effect.hbs",
+		{
+			actor: item.actor,
+			description,
+		},
+	);
+	const flags = { pf2e: { context: { type: "self-effect", item: item.id } } };
+	const messageData = ChatMessagePF2e.applyRollMode(
+		{ speaker, flavor, content, flags },
+		rollMode,
+	);
+
+	return ChatMessagePF2e.create(messageData);
 }

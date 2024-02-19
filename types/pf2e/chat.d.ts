@@ -30,4 +30,5 @@ export function onClickShieldBlock(target: object, shieldButton: HTMLElement, me
  * @param {string} messageId
  */
 export function toggleOffShieldBlock(messageId: string): void;
+export function createSelfEffectMessage(item: any, rollMode?: string): Promise<any>;
 export type OnDamageApplied = (message: object, tokens: object[], rollIndex: number) => void;

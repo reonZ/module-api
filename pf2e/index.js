@@ -8,4 +8,5 @@ export * from "./misc";
 export * from "./rules";
 export * from "./spell";
 export * from "./success";
+export * from "./tags";
 export * from "./template";
