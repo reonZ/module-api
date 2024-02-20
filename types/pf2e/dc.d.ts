@@ -6,6 +6,11 @@
  */
 /**
  * @param {number} level
+ * @returns {number}
+ */
+export function getDcByLevel(level: number): number;
+/**
+ * @param {number} level
  * @param {object} [options]
  * @param {boolean} [options.pwol]
  * @param {Rarity} [options.rarity]

@@ -74,6 +74,15 @@ export const simpleDCsWithoutLevel = new Map([
 
 /**
  * @param {number} level
+ * @returns {number}
+ */
+export function getDcByLevel(level) {
+	const clamped = Math.clamped(level, -1, 25);
+	return dcByLevel.get(clamped);
+}
+
+/**
+ * @param {number} level
  * @param {object} [options]
  * @param {boolean} [options.pwol]
  * @param {Rarity} [options.rarity]
