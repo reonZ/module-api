@@ -80,7 +80,7 @@ export class IdentifyItemPopup extends FormApplication {
 	}
 }
 
-function getItemIdentificationDCs(
+export function getItemIdentificationDCs(
 	item,
 	{ pwol = false, notMatchingTraditionModifier },
 ) {

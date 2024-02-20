@@ -1,3 +1,14 @@
+export function getItemIdentificationDCs(item: any, { pwol, notMatchingTraditionModifier }: {
+    pwol?: boolean;
+    notMatchingTraditionModifier: any;
+}): {
+    arcana: number;
+    nature: number;
+    occultism: number;
+    religion: number;
+} | {
+    crafting: number;
+};
 export class IdentifyItemPopup {
     static get defaultOptions(): any;
     dcs: {
