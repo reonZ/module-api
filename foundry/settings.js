@@ -14,8 +14,8 @@ export function registerSetting(options) {
 		);
 	}
 
-	options.name ??= settingPath(options.key, "name");
-	options.hint ??= settingPath(options.key, "hint");
+	options.name = settingPath(options.key, "name");
+	options.hint = settingPath(options.key, "hint");
 	options.scope ??= "world";
 	options.config ??= true;
 
