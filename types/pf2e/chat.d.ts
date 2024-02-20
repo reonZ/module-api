@@ -51,12 +51,12 @@ export function createTradeContent(message: string, img: string): Promise<string
  * @param {foundry.Document|string} docOrUuid
  * @param {object} [options]
  * @param {boolean} [options.async]
- * @param {boolean} [options.label]
+ * @param {string} [options.label]
  * @returns {Promise<string>}
  */
 export function createFancyLink(docOrUuid: foundry.Document | string, { async, label }?: {
     async?: boolean;
-    label?: boolean;
+    label?: string;
 }): Promise<string>;
 /**
  *

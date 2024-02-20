@@ -10,7 +10,7 @@ export function registerSetting(options) {
 
 	if (Array.isArray(options.choices)) {
 		options.choices = arrayToObject(options.choices, (choice) =>
-			settingPath(options.key, `choices.${choice}`),
+			settingPath(options.key, "choices", choice),
 		);
 	}
 

@@ -12,4 +12,5 @@ export * from "./module";
 export * from "./notifications";
 export * from "./settings";
 export * from "./socket";
+export * from "./tooltip";
 export * from "./user";
