@@ -5,6 +5,7 @@ export * from "./classes";
 export * from "./dc";
 export * from "./html";
 export * from "./identify";
+export * from "./inline-roll";
 export * from "./item";
 export * from "./misc";
 export * from "./predicate";
