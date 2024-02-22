@@ -1,3 +1,13 @@
+export const EFFECT_AREA_SHAPES = [
+	"burst",
+	"cone",
+	"cube",
+	"cylinder",
+	"emanation",
+	"line",
+	"square",
+];
+
 export const MAGIC_TRADITIONS = new Set([
 	"arcane",
 	"divine",
