@@ -2,14 +2,9 @@ import * as R from "remeda";
 import { getSelectedActors } from "./actor";
 import { calculateDC } from "./dc";
 import { htmlClosest, htmlQueryAll } from "./html";
-import {
-	ErrorPF2e,
-	getActionGlyph,
-	objectHasKey,
-	sluggify,
-	tupleHasValue,
-} from "./misc";
+import { ErrorPF2e, getActionGlyph, sluggify, tupleHasValue } from "./misc";
 import { eventToRollParams } from "./scripts";
+import { EFFECT_AREA_SHAPES } from "./spell";
 
 const SAVE_TYPES = ["fortitude", "reflex", "will"];
 const inlineSelector = ["action", "check", "effect-area"]
@@ -141,14 +136,14 @@ export const InlineRollLinks = {
 
 					// Use the DOM document as a fallback if it's an actor and the check isn't a saving throw
 					const sheetActor = (() => {
-						const actor =
+						const maybeActor =
 							foundryDoc instanceof Actor
 								? foundryDoc
 								: foundryDoc instanceof Item && foundryDoc.actor
 								  ? foundryDoc.actor
 								  : null;
-						return actor.isOwner && !actor.isOfType("loot", "party")
-							? actor
+						return maybeActor?.isOwner && !maybeActor.isOfType("loot", "party")
+							? maybeActor
 							: null;
 					})();
 					const rollingActors = [
@@ -366,26 +361,26 @@ export const InlineRollLinks = {
 					return;
 				}
 
-				const templateData = JSON.parse(pf2TemplateData ?? "{}");
-				templateData.distance ||= Number(pf2Distance);
-				templateData.fillColor ||= game.user.color;
-				templateData.t = templateConversion[pf2EffectArea];
+				const data = JSON.parse(pf2TemplateData ?? "{}");
+				data.distance ||= Number(pf2Distance);
+				data.fillColor ||= game.user.color;
+				data.t = templateConversion[pf2EffectArea];
 
-				switch (templateData.t) {
+				switch (data.t) {
 					case "ray":
-						templateData.width =
+						data.width =
 							Number(pf2Width) ||
 							CONFIG.MeasuredTemplate.defaults.width *
 								canvas.dimensions.distance;
 						break;
 					case "cone":
-						templateData.angle ||= CONFIG.MeasuredTemplate.defaults.angle;
+						data.angle ||= CONFIG.MeasuredTemplate.defaults.angle;
 						break;
 					case "rect": {
-						const distance = templateData.distance ?? 0;
-						templateData.distance = Math.hypot(distance, distance);
-						templateData.width = distance;
-						templateData.direction = 45;
+						const distance = data.distance ?? 0;
+						data.distance = Math.hypot(distance, distance);
+						data.width = distance;
+						data.direction = 45;
 						break;
 					}
 				}
@@ -394,11 +389,12 @@ export const InlineRollLinks = {
 					pf2e: {},
 				};
 
+				const normalSize = (Math.ceil(data.distance) / 5) * 5 || 5;
 				if (
-					objectHasKey(CONFIG.PF2E.areaTypes, pf2EffectArea) &&
-					objectHasKey(CONFIG.PF2E.areaSizes, templateData.distance)
+					tupleHasValue(EFFECT_AREA_SHAPES, pf2EffectArea) &&
+					data.distance === normalSize
 				) {
-					flags.pf2e.areaType = pf2EffectArea;
+					flags.pf2e.areaShape = pf2EffectArea;
 				}
 
 				const messageId =
@@ -422,10 +418,10 @@ export const InlineRollLinks = {
 				}
 
 				if (!R.isEmpty(flags.pf2e)) {
-					templateData.flags = flags;
+					data.flags = flags;
 				}
 
-				canvas.templates.createPreview(templateData);
+				canvas.templates.createPreview(data);
 			});
 		}
 
