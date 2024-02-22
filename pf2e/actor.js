@@ -1,3 +1,5 @@
+import * as R from "remeda";
+
 /** A comparison which rates the first modifier as better than the second if it's modifier is at least as large. */
 const HIGHER_BONUS = (a, b) => a.modifier >= b.modifier;
 /** A comparison which rates the first modifier as better than the second if it's modifier is at least as small. */
@@ -85,4 +87,36 @@ function applyStacking(best, modifier, isBetter) {
 	// Otherwise, the existing modifier is better, so do nothing.
 	modifier.enabled = false;
 	return 0;
+}
+
+export function getSelectedActors(options = {}) {
+	const {
+		include = actorTypes,
+		exclude = [],
+		assignedFallback = false,
+	} = options;
+	const actors = R.uniq(
+		game.user
+			.getActiveTokens()
+			.flatMap((t) =>
+				t.actor &&
+				(include.length === 0 || t.actor.isOfType(...include)) &&
+				(exclude.length === 0 || !t.actor.isOfType(...exclude))
+					? t.actor
+					: [],
+			),
+	);
+	const assigned = game.user.character;
+	if (actors.length > 0 || !assignedFallback || !assigned) {
+		return actors;
+	}
+
+	if (
+		(include.length === 0 || assigned.isOfType(...include)) &&
+		(exclude.length === 0 || !assigned.isOfType(...exclude))
+	) {
+		return [assigned];
+	}
+
+	return [];
 }
