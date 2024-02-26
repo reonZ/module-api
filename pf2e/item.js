@@ -292,11 +292,11 @@ export async function unownedItemToMessage(event, item, actor, options = {}) {
 		{
 			type: CONST.CHAT_MESSAGE_TYPES.OTHER,
 			speaker: ChatMessagePF2e.getSpeaker({
-				actor: this.actor,
-				token: this.actor.getActiveTokens(false, true).at(0),
+				actor: actor,
+				token: actor.getActiveTokens(false, true).at(0),
 			}),
 			content: await renderTemplate(template, templateData),
-			flags: { pf2e: { origin: this.getOriginData() } },
+			flags: { pf2e: { origin: item.getOriginData() } },
 		},
 		rollMode,
 	);
