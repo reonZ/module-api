@@ -39,7 +39,7 @@ export function getInMemoryAndSetIfNot(doc, ...args) {
  * @returns {boolean}
  */
 export function deleteInMemory(doc, ...path) {
-	const split = ["modules", MODULE.id, ...path];
+	const split = ["modules", MODULE.id, ...path.flatMap((x) => x.split("."))];
 	const last = split.pop();
 	let cursor = doc;
 	for (const key of split) {
