@@ -33,7 +33,7 @@ export function getBrowserTab(tabName) {
 
 /**
  * @param {TabName} tabOrName
- * @param {object|true} [data]
+ * @param {object|false} [data]
  * @returns {Promise<void>}
  */
 export function openBrowserTab(tabOrName, data) {
@@ -41,8 +41,8 @@ export function openBrowserTab(tabOrName, data) {
 	const tabData =
 		typeof data === "object"
 			? data
-			: data === true && tab.isInitialized
-			  ? tab.filterData
+			: data === false && tab.isInitialized
+			  ? deepClone(tab.defaultFilterData)
 			  : undefined;
 	return game.pf2e.compendiumBrowser.openTab(tab.tabName, tabData);
 }

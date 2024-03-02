@@ -18,10 +18,10 @@ export function getBrowser(): object;
 export function getBrowserTab(tabName: TabName): object;
 /**
  * @param {TabName} tabOrName
- * @param {object|true} [data]
+ * @param {object|false} [data]
  * @returns {Promise<void>}
  */
-export function openBrowserTab(tabOrName: TabName, data?: object | true): Promise<void>;
+export function openBrowserTab(tabOrName: TabName, data?: object | false): Promise<void>;
 export function getEquipmentTabData({ collapsed, mergeWith }?: {
     collapsed?: boolean;
     mergeWith: any;
