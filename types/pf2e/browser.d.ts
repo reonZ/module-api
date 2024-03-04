@@ -17,12 +17,6 @@ export function getBrowser(): object;
  */
 export function getBrowserTab(tabName: TabName): object;
 /**
- * @param {string[]} list
- * @param {string} uuid
- * @returns boolean
- */
-export function includesBrowserUUID(list: string[], uuid: string): boolean;
-/**
  * @param {TabName} tabOrName
  * @param {object|false} [data]
  * @returns {Promise<void>}

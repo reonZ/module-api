@@ -31,16 +31,6 @@ export function getBrowserTab(tabName) {
 	return game.pf2e.compendiumBrowser.tabs[tabName];
 }
 
-const UUID_REGEX = /(equipment-srd)\.([a-zA-Z0-9]{16})$/;
-/**
- * @param {string[]} list
- * @param {string} uuid
- * @returns boolean
- */
-export function includesBrowserUUID(list, uuid) {
-	return list.includes(uuid.replace(UUID_REGEX, "$1.Item.$2"));
-}
-
 /**
  * @param {TabName} tabOrName
  * @param {object|false} [data]
