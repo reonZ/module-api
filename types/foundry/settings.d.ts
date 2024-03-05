@@ -23,3 +23,8 @@ export function registerSetting<T extends string | number | boolean>(options: {
  * @returns {string}
  */
 export function settingPath(...path: string[]): string;
+/**
+ * @param {string} setting
+ * @returns {unknown}
+ */
+export function getSetting(setting: string): unknown;

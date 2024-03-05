@@ -45,3 +45,11 @@ export function registerSetting(options) {
 export function settingPath(...path) {
 	return `${MODULE.id}.settings.${path.join(".")}`;
 }
+
+/**
+ * @param {string} setting
+ * @returns {unknown}
+ */
+export function getSetting(setting) {
+	return game.settings.get(MODULE.id, setting);
+}
