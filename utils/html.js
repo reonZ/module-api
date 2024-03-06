@@ -6,11 +6,20 @@ export function element(el) {
 	return el instanceof jQuery ? el[0] : el;
 }
 
+export function createHTML(content) {
+	if (!content) return;
+
+	const tmp = document.createElement("div");
+	tmp.innerHTML = content;
+
+	const children = tmp.children;
+	return children.length > 1 ? children : children[0];
+}
+
 /**
- * @template {Node} T
  * @param {HTMLElement} parent
- * @param {T|string} content
- * @returns {T}
+ * @param {Node|string} content
+ * @returns {Node}
  */
 function insertHTML(parent, content, prepend = false) {
 	if (!content) return;
@@ -23,16 +32,37 @@ function insertHTML(parent, content, prepend = false) {
 		return inserMethod(content);
 	}
 
-	const tmp = document.createElement("div");
-	tmp.innerHTML = content;
+	const children = createHTML(content);
+	applyHtmlMethod(inserMethod, children);
 
-	const children = tmp.children;
+	return children;
+}
 
-	for (const child of children) {
-		inserMethod(child);
+function applyHtmlMethod(fn, children, context) {
+	const fnc = context ? fn.bind(context) : fn;
+
+	if (Array.isArray(children)) {
+		for (const child of children) {
+			fnc(child);
+		}
+	} else {
+		fnc(children);
+	}
+}
+
+/**
+ * @param {HTMLElement} oldElement
+ * @param {Node|string} content
+ */
+export function replaceHTML(oldElement, content) {
+	if (!content) return;
+
+	if (content instanceof Node) {
+		return oldElement.replaceWith(content);
 	}
 
-	return children.length > 1 ? children : children[0];
+	const children = createHTML(content);
+	applyHtmlMethod(oldElement.replaceWith, children, oldElement);
 }
 
 /**
