@@ -23,7 +23,14 @@ export function isClientSetting(setting) {
 
 /**
  * @template {number | boolean | string} T
- * @param { {key: string, type: new (...args: unknkown[]) => T, default: T, [k: string]: unknown }} options
+ * @param {object} options
+ * @param {string} options.key
+ * @param {new (...args: unknkown[]) => T} options.type
+ * @param {T} options.default
+ * @param {boolean} [options.scope]
+ * @param {boolean} [options.config]
+ * @param {boolean} [options.requiresReload]
+ * @param {(value: T) => void} [options.onChange]
  */
 export function registerSetting(options) {
 	options.key ??= options.name;
@@ -40,6 +47,25 @@ export function registerSetting(options) {
 	options.config ??= true;
 
 	game.settings.register(MODULE.id, options.key, options);
+}
+
+/**
+ * @param {object} options
+ * @param {string} options.key
+ * @param {typeof FormApplication} options.type
+ * @param {string} [options.icon]
+ * @param {boolean} [options.restricted]
+ */
+export function registerSettingMenu(options) {
+	options.key ??= options.name;
+
+	options.name = settingPath("menus", options.key, "name");
+	options.label = settingPath("menus", options.key, "label");
+	options.hint = settingPath("menus", options.key, "hint");
+	options.restricted ??= true;
+	options.icon ??= "fas fa-cogs";
+
+	game.settings.registerMenu(MODULE.id, options.key, options);
 }
 
 /**

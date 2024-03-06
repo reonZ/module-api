@@ -11,13 +11,36 @@ export function isWorldSetting(setting: object): boolean;
 export function isClientSetting(setting: object): boolean;
 /**
  * @template {number | boolean | string} T
- * @param { {key: string, type: new (...args: unknkown[]) => T, default: T, [k: string]: unknown }} options
+ * @param {object} options
+ * @param {string} options.key
+ * @param {new (...args: unknkown[]) => T} options.type
+ * @param {T} options.default
+ * @param {boolean} [options.scope]
+ * @param {boolean} [options.config]
+ * @param {boolean} [options.requiresReload]
+ * @param {(value: T) => void} [options.onChange]
  */
 export function registerSetting<T extends string | number | boolean>(options: {
-    [k: string]: unknown;
     key: string;
     type: new (...args: unknkown[]) => T;
     default: T;
+    scope?: boolean;
+    config?: boolean;
+    requiresReload?: boolean;
+    onChange?: (value: T) => void;
+}): void;
+/**
+ * @param {object} options
+ * @param {string} options.key
+ * @param {typeof FormApplication} options.type
+ * @param {string} [options.icon]
+ * @param {boolean} [options.restricted]
+ */
+export function registerSettingMenu(options: {
+    key: string;
+    type: typeof FormApplication;
+    icon?: string;
+    restricted?: boolean;
 }): void;
 /**
  * @param {string[]} path
