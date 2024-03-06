@@ -73,7 +73,7 @@ export function registerSettingMenu(options) {
  * @returns {string}
  */
 export function settingPath(...path) {
-	return `${MODULE.id}.settings.${path.join(".")}`;
+	return MODULE.path("settings", path);
 }
 
 /**

@@ -1,3 +1,5 @@
+import { joinStr } from "../utils";
+
 /**
  * @type {string}
  */
@@ -25,7 +27,17 @@ export const MODULE = {
 		}
 		MODULE_ID = id;
 	},
+	/**
+	 * @param {string} str
+	 */
 	log(str) {
 		console.log(`[${this.id}] ${str}`);
+	},
+	/**
+	 * @param  {(string|string[])[]} path
+	 * @returns {string}
+	 */
+	path(...path) {
+		return `${this.id}.${joinStr(".", ...path)}`;
 	},
 };

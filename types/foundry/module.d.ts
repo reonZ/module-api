@@ -8,5 +8,13 @@ export namespace MODULE {
      * @param {string} id
      */
     function register(id: string): void;
-    function log(str: any): void;
+    /**
+     * @param {string} str
+     */
+    function log(str: string): void;
+    /**
+     * @param  {(string|string[])[]} path
+     * @returns {string}
+     */
+    function path(...path: (string | string[])[]): string;
 }

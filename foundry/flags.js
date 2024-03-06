@@ -6,7 +6,7 @@ import { MODULE } from "./module";
  * @returns {string}
  */
 export function flagPath(...path) {
-	return `flags.${MODULE.id}.${joinStr(".", path)}`;
+	return `flags.${MODULE.path(path)}`;
 }
 
 /**

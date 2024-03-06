@@ -18,7 +18,7 @@ export function localize(...args) {
  * @returns {boolean}
  */
 export function hasLocalization(...keys) {
-	return game.i18n.has(`${MODULE.id}.${keys.join(".")}`, false);
+	return game.i18n.has(`${MODULE.path(keys)}`, false);
 }
 
 /**
@@ -36,7 +36,7 @@ export function templateLocalize(...args) {
  * @returns {string}
  */
 export function localizePath(...path) {
-	return `${MODULE.id}.${path.join(".")}`;
+	return MODULE.path(path);
 }
 
 /**
