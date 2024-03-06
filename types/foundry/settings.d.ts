@@ -1,3 +1,4 @@
+export function isMenuSetting(setting: any): boolean;
 /**
  * @param {object} setting
  * @returns {boolean}

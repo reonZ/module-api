@@ -1,6 +1,10 @@
 import { arrayToObject } from "../utils";
 import { MODULE } from "./module";
 
+export function isMenuSetting(setting) {
+	return setting.type.prototype instanceof Application;
+}
+
 /**
  * @param {object} setting
  * @returns {boolean}
