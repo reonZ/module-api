@@ -84,3 +84,23 @@ export function appendHTML(parent, content) {
 export function prependHTML(parent, content) {
 	insertHTML(parent, content, true);
 }
+
+/**
+ * @param {HTMLElement} parent
+ * @param {string} selector
+ * @param {string} event
+ * @param {(event: MouseEvent, element: HTMLElement) => void} listener
+ * @param {boolean} [all]
+ * @returns {HTMLElement|HTMLElement[]}
+ */
+export function addListener(parent, selector, event, listener, all = false) {
+	const elements = all
+		? parent.querySelectorAll(selector)
+		: [parent.querySelector(selector)].filter(Boolean);
+
+	for (const element of elements) {
+		element.addEventListener(event, (e) => listener(e, element));
+	}
+
+	return all ? elements : elements[0];
+}

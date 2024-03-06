@@ -23,3 +23,12 @@ export function appendHTML<T extends Node>(parent: HTMLElement, content: string 
  * @returns {T}
  */
 export function prependHTML<T extends Node>(parent: HTMLElement, content: string | T): T;
+/**
+ * @param {HTMLElement} parent
+ * @param {string} selector
+ * @param {string} event
+ * @param {(event: MouseEvent, element: HTMLElement) => void} listener
+ * @param {boolean} [all]
+ * @returns {HTMLElement|HTMLElement[]}
+ */
+export function addListener(parent: HTMLElement, selector: string, event: string, listener: (event: MouseEvent, element: HTMLElement) => void, all?: boolean): HTMLElement | HTMLElement[];
