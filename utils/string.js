@@ -4,6 +4,6 @@
  * @returns {string}
  */
 export function joinStr(separator, ...path) {
-	const pathArr = Array.isArray(path[0]) ? path[0] : path;
+	const pathArr = path.flatMap((x) => x);
 	return pathArr.filter((x) => typeof x === "string").join(separator);
 }
