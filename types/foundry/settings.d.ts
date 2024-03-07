@@ -52,3 +52,10 @@ export function settingPath(...path: string[]): string;
  * @returns {unknown}
  */
 export function getSetting(setting: string): unknown;
+/**
+ * @template T
+ * @param {string} setting
+ * @param {T} value
+ * @returns {Promise<T>}
+ */
+export function setSetting<T>(setting: string, value: T): Promise<T>;

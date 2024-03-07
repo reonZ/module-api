@@ -83,3 +83,13 @@ export function settingPath(...path) {
 export function getSetting(setting) {
 	return game.settings.get(MODULE.id, setting);
 }
+
+/**
+ * @template T
+ * @param {string} setting
+ * @param {T} value
+ * @returns {Promise<T>}
+ */
+export function setSetting(setting, value) {
+	return game.settings.set(MODULE.id, setting, value);
+}
