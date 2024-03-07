@@ -12,11 +12,14 @@ export const MODULE = {
 		}
 		return MODULE_ID;
 	},
+	get name() {
+		return "Settings Manager";
+	},
 	/**
 	 * @param {string} str
 	 */
 	error(str) {
-		throw new Error(`[${this.id}] ${str}`);
+		throw new Error(`\n[${this.name}] ${str}`);
 	},
 	/**
 	 * @param {string} id
@@ -31,7 +34,7 @@ export const MODULE = {
 	 * @param {string} str
 	 */
 	log(str) {
-		console.log(`[${this.id}] ${str}`);
+		console.log(`[${this.name}] ${str}`);
 	},
 	/**
 	 * @param  {(string|string[])[]} path

@@ -1,5 +1,6 @@
 export namespace MODULE {
     const id: string;
+    const name: string;
     /**
      * @param {string} str
      */
