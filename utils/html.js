@@ -2,13 +2,15 @@
  * @param {HTMLElement|jQuery} el
  * @returns {HTMLElement}
  */
-export function element(el) {
+export function htmlElement(el) {
 	return el instanceof jQuery ? el[0] : el;
 }
 
-export function createHTML(content) {
-	if (!content) return;
-
+/**
+ * @param {string} content
+ * @returns {Element|HTMLCollection}
+ */
+export function createHTMLFromString(content) {
 	const tmp = document.createElement("div");
 	tmp.innerHTML = content;
 
@@ -18,23 +20,12 @@ export function createHTML(content) {
 
 /**
  * @param {HTMLElement} parent
- * @param {Node|string} content
- * @returns {Node}
+ * @param {string} content
+ * @returns {Element|HTMLCollection}
  */
-function insertHTML(parent, content, prepend = false) {
-	if (!content) return;
-
-	const inserMethod = prepend
-		? parent.prepend.bind(parent)
-		: parent.append.bind(parent);
-
-	if (content instanceof Node) {
-		return inserMethod(content);
-	}
-
-	const children = createHTML(content);
-	applyHtmlMethod(inserMethod, children);
-
+function insertHTMLFromString(parent, content, prepend = false) {
+	const children = createHTMLFromString(content);
+	applyHtmlMethod(prepend ? parent.prepend : parent.append, children, parent);
 	return children;
 }
 
@@ -52,37 +43,51 @@ function applyHtmlMethod(fn, children, context) {
 
 /**
  * @param {HTMLElement} oldElement
- * @param {Node|string} content
+ * @param {string} content
  */
-export function replaceHTML(oldElement, content) {
-	if (!content) return;
-
-	if (content instanceof Node) {
-		return oldElement.replaceWith(content);
-	}
-
-	const children = createHTML(content);
+export function replaceHTMLFromString(oldElement, content) {
+	const children = createHTMLFromString(content);
 	applyHtmlMethod(oldElement.replaceWith, children, oldElement);
 }
 
 /**
- * @template {Node} T
  * @param {HTMLElement} parent
- * @param {T|string} content
- * @returns {T}
+ * @param {string} content
+ * @returns {Element | HTMLCollection}
  */
-export function appendHTML(parent, content) {
-	insertHTML(parent, content, false);
+export function appendHTMLFromString(parent, content) {
+	return insertHTMLFromString(parent, content, false);
 }
 
 /**
- * @template {Node} T
  * @param {HTMLElement} parent
- * @param {T|string} content
- * @returns {T}
+ * @param {string} content
+ * @returns {Element | HTMLCollection}
  */
-export function prependHTML(parent, content) {
-	insertHTML(parent, content, true);
+export function prependHTMLFromString(parent, content) {
+	return insertHTMLFromString(parent, content, true);
+}
+
+/**
+ * @param {HTMLElement} element
+ * @param {string} content
+ * @returns {Element | HTMLCollection}
+ */
+export function afterHTMLFromString(element, content) {
+	const children = createHTMLFromString(content);
+	applyHtmlMethod(element.after, children, element);
+	return children;
+}
+
+/**
+ * @param {HTMLElement} element
+ * @param {string} content
+ * @returns {Element | HTMLCollection}
+ */
+export function beforeHTMLFromString(element, content) {
+	const children = createHTMLFromString(content);
+	applyHtmlMethod(element.before, children, element);
+	return children;
 }
 
 /**
