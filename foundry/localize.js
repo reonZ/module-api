@@ -22,13 +22,27 @@ export function hasLocalization(...keys) {
 }
 
 /**
- * Used to localize in handlebars template
- * @param  {(string | {hash: object})[]} args
- * @returns {string}
+ * @param {string} subKey
+ * @returns {((key: string, options: {hash: Record<string, string|number|boolean>}) => string) & {path: typeof localizePath, sub: typeof subLocalize}}
  */
-export function templateLocalize(...args) {
-	const data = args.splice(-1)[0].hash;
-	return localize(...args, data);
+export function templateLocalize(subKey) {
+	const fn = (key, { hash } = {}) => localize(subKey, key, hash);
+	Object.defineProperties(fn, {
+		path: {
+			value: (key) => localizePath(subKey, key),
+			enumerable: false,
+			configurable: false,
+		},
+		sub: {
+			value: (key) => {
+				const joinedKey = subKey ? `${subKey}.${key}` : key;
+				return subLocalize(joinedKey).i18n;
+			},
+			enumerable: false,
+			configurable: false,
+		},
+	});
+	return fn;
 }
 
 /**
@@ -42,7 +56,7 @@ export function localizePath(...path) {
 /**
  * Convenient localization object with a sub context
  * @param {string} subKey
- * @returns { typeof localize & {path: typeof localizePath, template: typeof templateLocalize, warn: typeof warn, info: typeof info, error: typeof error, i18n: {i18n: typeof templateLocalize, i18Path: typeof localizePath}, sub: typeof subLocalize} }
+ * @returns { typeof localize & {path: typeof localizePath, warn: typeof warn, info: typeof info, error: typeof error, i18n: typeof templateLocalize & {path: typeof localizePath, sub: typeof subLocalize}, sub: typeof subLocalize} }
  */
 export function subLocalize(subKey) {
 	const fn = (...args) => localize(subKey, ...args);
@@ -73,23 +87,15 @@ export function subLocalize(subKey) {
 			enumerable: false,
 			configurable: false,
 		},
-		template: {
-			value: (key, { hash }) => fn(key, hash),
+		sub: {
+			value: (key) => subLocalize(`${subKey}.${key}`),
 			enumerable: false,
 			configurable: false,
 		},
 		i18n: {
 			get() {
-				return {
-					i18n: this.template,
-					i18Path: this.path,
-				};
+				return templateLocalize(subKey);
 			},
-			enumerable: false,
-			configurable: false,
-		},
-		sub: {
-			value: (key) => subLocalize(`${subKey}.${key}`),
 			enumerable: false,
 			configurable: false,
 		},
