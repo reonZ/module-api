@@ -2,27 +2,41 @@
  * @param {HTMLElement|jQuery} el
  * @returns {HTMLElement}
  */
-export function element(el: HTMLElement | jQuery): HTMLElement;
-export function createHTML(content: any): Element | HTMLCollection;
+export function htmlElement(el: HTMLElement | jQuery): HTMLElement;
+/**
+ * @param {string} content
+ * @returns {Element|HTMLCollection}
+ */
+export function createHTMLFromString(content: string): Element | HTMLCollection;
 /**
  * @param {HTMLElement} oldElement
- * @param {Node|string} content
+ * @param {string} content
  */
-export function replaceHTML(oldElement: HTMLElement, content: Node | string): void;
+export function replaceHTMLFromString(oldElement: HTMLElement, content: string): void;
 /**
- * @template {Node} T
  * @param {HTMLElement} parent
- * @param {T|string} content
- * @returns {T}
+ * @param {string} content
+ * @returns {Element | HTMLCollection}
  */
-export function appendHTML<T extends Node>(parent: HTMLElement, content: string | T): T;
+export function appendHTMLFromString(parent: HTMLElement, content: string): Element | HTMLCollection;
 /**
- * @template {Node} T
  * @param {HTMLElement} parent
- * @param {T|string} content
- * @returns {T}
+ * @param {string} content
+ * @returns {Element | HTMLCollection}
  */
-export function prependHTML<T extends Node>(parent: HTMLElement, content: string | T): T;
+export function prependHTMLFromString(parent: HTMLElement, content: string): Element | HTMLCollection;
+/**
+ * @param {HTMLElement} element
+ * @param {string} content
+ * @returns {Element | HTMLCollection}
+ */
+export function afterHTMLFromString(element: HTMLElement, content: string): Element | HTMLCollection;
+/**
+ * @param {HTMLElement} element
+ * @param {string} content
+ * @returns {Element | HTMLCollection}
+ */
+export function beforeHTMLFromString(element: HTMLElement, content: string): Element | HTMLCollection;
 /**
  * @param {HTMLElement} parent
  * @param {string} selector

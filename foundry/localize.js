@@ -42,7 +42,7 @@ export function localizePath(...path) {
 /**
  * Convenient localization object with a sub context
  * @param {string} subKey
- * @returns { typeof localize & {path: typeof localizePath, template: typeof templateLocalize, warn: typeof warn, info: typeof info, error: typeof error, i18n: {i18n: typeof templateLocalize, i18Path: typeof localizePath}} }
+ * @returns { typeof localize & {path: typeof localizePath, template: typeof templateLocalize, warn: typeof warn, info: typeof info, error: typeof error, i18n: {i18n: typeof templateLocalize, i18Path: typeof localizePath}, sub: typeof subLocalize} }
  */
 export function subLocalize(subKey) {
 	const fn = (...args) => localize(subKey, ...args);
@@ -85,6 +85,11 @@ export function subLocalize(subKey) {
 					i18Path: this.path,
 				};
 			},
+			enumerable: false,
+			configurable: false,
+		},
+		sub: {
+			value: (key) => subLocalize(`${subKey}.${key}`),
 			enumerable: false,
 			configurable: false,
 		},
