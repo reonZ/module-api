@@ -1,4 +1,5 @@
 export * from "./app";
+export * from "./dialog";
 export * from "./flags";
 export * from "./libwrapper";
 export * from "./localize";
