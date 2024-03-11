@@ -1,6 +1,28 @@
 import * as R from "remeda";
 import { MODULE } from "./module";
 
+/**
+ * @typedef {object} SettingOptions
+ * @property {string} key
+ * @property {new (...args: unknown[]) => unknown} type
+ * @property {unknown} default
+ * @property {string} [name]
+ * @property {string} [hint]
+ * @property {"world"|"client"} [scope]
+ * @property {boolean} [config]
+ * @property {string[]|Record<string, string>} [choices]
+ */
+
+/**
+ * @typedef {object} SettingMenuOptions
+ * @property {string} key
+ * @property {string} [name]
+ * @property {string} [hint]
+ * @property {string} [label]
+ * @property {boolean} [restricted]
+ * @property {string} [icon]
+ */
+
 export function isMenuSetting(setting) {
 	return setting.type.prototype instanceof Application;
 }
@@ -22,15 +44,7 @@ export function isClientSetting(setting) {
 }
 
 /**
- * @template {number | boolean | string} T
- * @param {object} options
- * @param {string} options.key
- * @param {new (...args: unknkown[]) => T} options.type
- * @param {T} options.default
- * @param {boolean} [options.scope]
- * @param {boolean} [options.config]
- * @param {boolean} [options.requiresReload]
- * @param {(value: T) => void} [options.onChange]
+ * @param {SettingOptions} options
  */
 export function registerSetting(options) {
 	options.key ??= options.name;
@@ -51,11 +65,7 @@ export function registerSetting(options) {
 }
 
 /**
- * @param {object} options
- * @param {string} options.key
- * @param {typeof FormApplication} options.type
- * @param {string} [options.icon]
- * @param {boolean} [options.restricted]
+ * @param {SettingMenuOptions} options
  */
 export function registerSettingMenu(options) {
 	options.key ??= options.name;
