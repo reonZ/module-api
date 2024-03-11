@@ -1,8 +1,8 @@
 /**
- * @param {HTMLElement|jQuery} el
+ * @param {HTMLElement|JQuery} el
  * @returns {HTMLElement}
  */
-export function htmlElement(el: HTMLElement | jQuery): HTMLElement;
+export function htmlElement(el: HTMLElement | JQuery): HTMLElement;
 /**
  * @param {string} content
  * @returns {Element|HTMLCollection}

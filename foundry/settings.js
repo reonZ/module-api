@@ -3,6 +3,7 @@ import { MODULE } from "./module";
 
 /**
  * @typedef {object} SettingOptions
+ * @property {string} namespace
  * @property {string} key
  * @property {new (...args: unknown[]) => unknown} type
  * @property {unknown} default
@@ -10,25 +11,37 @@ import { MODULE } from "./module";
  * @property {string} [hint]
  * @property {"world"|"client"} [scope]
  * @property {boolean} [config]
+ * @property {boolean} [requiresReload]
  * @property {string[]|Record<string, string>} [choices]
+ * @property {(value: unknown) => void} [onChange]
+ *
+ * @typedef {Omit<SettingOptions, "namespace"|"hint">} ModuleSettingOptions
  */
 
 /**
  * @typedef {object} SettingMenuOptions
+ * @property {string} namespace
  * @property {string} key
  * @property {string} [name]
  * @property {string} [hint]
  * @property {string} [label]
  * @property {boolean} [restricted]
  * @property {string} [icon]
+ *
+ * @typedef {Omit<SettingMenuOptions, "namespace"|"hint"|"label">} ModuleSettingMenuOptions
  */
 
+/**
+ *
+ * @param {SettingOptions|SettingMenuOptions} setting
+ * @returns {boolean}
+ */
 export function isMenuSetting(setting) {
 	return setting.type.prototype instanceof Application;
 }
 
 /**
- * @param {object} setting
+ * @param {SettingOptions|SettingMenuOptions} setting
  * @returns {boolean}
  */
 export function isWorldSetting(setting) {
@@ -36,7 +49,7 @@ export function isWorldSetting(setting) {
 }
 
 /**
- * @param {object} setting
+ * @param {SettingOptions|SettingMenuOptions} setting
  * @returns {boolean}
  */
 export function isClientSetting(setting) {
@@ -44,7 +57,7 @@ export function isClientSetting(setting) {
 }
 
 /**
- * @param {SettingOptions} options
+ * @param {ModuleSettingOptions} options
  */
 export function registerSetting(options) {
 	options.key ??= options.name;
@@ -65,7 +78,7 @@ export function registerSetting(options) {
 }
 
 /**
- * @param {SettingMenuOptions} options
+ * @param {ModuleSettingMenuOptions} options
  */
 export function registerSettingMenu(options) {
 	options.key ??= options.name;

@@ -1,28 +1,29 @@
 /**
+ * @template T
  * @param {object} options
  * @param {string} options.title
  * @param {string} options.template
  * @param {object} options.yes
  * @param {string} options.yes.label
  * @param {string} [options.yes.icon]
- * @param {(html: jQuery|HTMLElement) => unknown} [options.yes.callback]
+ * @param {(html: HTMLElement|JQuery) => T} options.yes.callback
  * @param {string} options.no
  * @param {object} [options.data]
  * @param {string} [options.id]
- * @returns {Promise<unknown>}
+ * @returns {Promise<T|null>}
  */
-export function waitDialog(options: {
+export function waitDialog<T>(options: {
     title: string;
     template: string;
     yes: {
         label: string;
         icon?: string;
-        callback?: (html: jQuery | HTMLElement) => unknown;
+        callback: (html: HTMLElement | JQuery) => T;
     };
     no: string;
     data?: object;
     id?: string;
-}): Promise<unknown>;
+}): Promise<T>;
 /**
  * @param {object} options
  * @param {string} options.title
@@ -30,7 +31,7 @@ export function waitDialog(options: {
  * @param {boolean} [options.defaultYes]
  * @param {object} [options.data]
  * @param {string} [options.id]
- * @returns {Promise<unknown>}
+ * @returns {Promise<boolean>}
  */
 export function confirmDialog(options: {
     title: string;
@@ -38,4 +39,4 @@ export function confirmDialog(options: {
     defaultYes?: boolean;
     data?: object;
     id?: string;
-}): Promise<unknown>;
+}): Promise<boolean>;

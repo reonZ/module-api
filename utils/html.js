@@ -1,5 +1,5 @@
 /**
- * @param {HTMLElement|jQuery} el
+ * @param {HTMLElement|JQuery} el
  * @returns {HTMLElement}
  */
 export function htmlElement(el) {

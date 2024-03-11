@@ -1,17 +1,18 @@
 import { render } from "./app";
 
 /**
+ * @template T
  * @param {object} options
  * @param {string} options.title
  * @param {string} options.template
  * @param {object} options.yes
  * @param {string} options.yes.label
  * @param {string} [options.yes.icon]
- * @param {(html: jQuery|HTMLElement) => unknown} [options.yes.callback]
+ * @param {(html: HTMLElement|JQuery) => T} options.yes.callback
  * @param {string} options.no
  * @param {object} [options.data]
  * @param {string} [options.id]
- * @returns {Promise<unknown>}
+ * @returns {Promise<T|null>}
  */
 export async function waitDialog(options) {
 	const yesIcon = options.yes.icon ?? "fa-solid fa-check";
@@ -51,7 +52,7 @@ export async function waitDialog(options) {
  * @param {boolean} [options.defaultYes]
  * @param {object} [options.data]
  * @param {string} [options.id]
- * @returns {Promise<unknown>}
+ * @returns {Promise<boolean>}
  */
 export async function confirmDialog(options) {
 	const content = await render(options.template, options.data);

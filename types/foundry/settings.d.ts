@@ -1,5 +1,6 @@
 /**
  * @typedef {object} SettingOptions
+ * @property {string} namespace
  * @property {string} key
  * @property {new (...args: unknown[]) => unknown} type
  * @property {unknown} default
@@ -7,36 +8,48 @@
  * @property {string} [hint]
  * @property {"world"|"client"} [scope]
  * @property {boolean} [config]
+ * @property {boolean} [requiresReload]
  * @property {string[]|Record<string, string>} [choices]
+ * @property {(value: unknown) => void} [onChange]
+ *
+ * @typedef {Omit<SettingOptions, "namespace"|"hint">} ModuleSettingOptions
  */
 /**
  * @typedef {object} SettingMenuOptions
+ * @property {string} namespace
  * @property {string} key
  * @property {string} [name]
  * @property {string} [hint]
  * @property {string} [label]
  * @property {boolean} [restricted]
  * @property {string} [icon]
+ *
+ * @typedef {Omit<SettingMenuOptions, "namespace"|"hint"|"label">} ModuleSettingMenuOptions
  */
-export function isMenuSetting(setting: any): boolean;
 /**
- * @param {object} setting
+ *
+ * @param {SettingOptions|SettingMenuOptions} setting
  * @returns {boolean}
  */
-export function isWorldSetting(setting: object): boolean;
+export function isMenuSetting(setting: SettingOptions | SettingMenuOptions): boolean;
 /**
- * @param {object} setting
+ * @param {SettingOptions|SettingMenuOptions} setting
  * @returns {boolean}
  */
-export function isClientSetting(setting: object): boolean;
+export function isWorldSetting(setting: SettingOptions | SettingMenuOptions): boolean;
 /**
- * @param {SettingOptions} options
+ * @param {SettingOptions|SettingMenuOptions} setting
+ * @returns {boolean}
  */
-export function registerSetting(options: SettingOptions): void;
+export function isClientSetting(setting: SettingOptions | SettingMenuOptions): boolean;
 /**
- * @param {SettingMenuOptions} options
+ * @param {ModuleSettingOptions} options
  */
-export function registerSettingMenu(options: SettingMenuOptions): void;
+export function registerSetting(options: ModuleSettingOptions): void;
+/**
+ * @param {ModuleSettingMenuOptions} options
+ */
+export function registerSettingMenu(options: ModuleSettingMenuOptions): void;
 /**
  * @param {string[]} path
  * @returns {string}
@@ -55,6 +68,7 @@ export function getSetting(setting: string): unknown;
  */
 export function setSetting<T>(setting: string, value: T): Promise<T>;
 export type SettingOptions = {
+    namespace: string;
     key: string;
     type: new (...args: unknown[]) => unknown;
     default: unknown;
@@ -62,9 +76,13 @@ export type SettingOptions = {
     hint?: string;
     scope?: "world" | "client";
     config?: boolean;
+    requiresReload?: boolean;
     choices?: string[] | Record<string, string>;
+    onChange?: (value: unknown) => void;
 };
+export type ModuleSettingOptions = Omit<SettingOptions, "namespace" | "hint">;
 export type SettingMenuOptions = {
+    namespace: string;
     key: string;
     name?: string;
     hint?: string;
@@ -72,3 +90,4 @@ export type SettingMenuOptions = {
     restricted?: boolean;
     icon?: string;
 };
+export type ModuleSettingMenuOptions = Omit<SettingMenuOptions, "namespace" | "hint" | "label">;
