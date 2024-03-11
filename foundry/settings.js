@@ -1,4 +1,4 @@
-import { arrayToObject } from "../utils";
+import * as R from "remeda";
 import { MODULE } from "./module";
 
 export function isMenuSetting(setting) {
@@ -36,9 +36,10 @@ export function registerSetting(options) {
 	options.key ??= options.name;
 
 	if (Array.isArray(options.choices)) {
-		options.choices = arrayToObject(options.choices, (choice) =>
+		options.choices = R.mapToObj(options.choices, (choice) => [
+			choice,
 			settingPath(options.key, "choices", choice),
-		);
+		]);
 	}
 
 	options.name = settingPath(options.key, "name");
