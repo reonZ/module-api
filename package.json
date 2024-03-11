@@ -11,9 +11,10 @@
     "license": "ISC",
     "devDependencies": {
         "@biomejs/biome": "^1.5.3",
-        "typescript": "^5.3.3"
+        "@types/jquery": "^3.5.29",
+        "typescript": "5.3.3"
     },
     "dependencies": {
-        "remeda": "^1.43.0"
+        "remeda": "1.43.0"
     }
 }
