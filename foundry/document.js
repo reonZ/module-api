@@ -6,7 +6,7 @@ import { MODULE, socketEmit } from ".";
  * @returns {unknown}
  */
 export function getInMemory(doc, ...path) {
-	return getProperty(doc, `modules.${MODULE.id}.${path.join(".")}`);
+    return foundry.utils.getProperty(doc, `modules.${MODULE.id}.${path.join(".")}`);
 }
 
 /**
@@ -15,8 +15,8 @@ export function getInMemory(doc, ...path) {
  * @returns {Boolean}
  */
 export function setInMemory(doc, ...args) {
-	const value = args.splice(-1)[0];
-	return setProperty(doc, `modules.${MODULE.id}.${args.join(".")}`, value);
+    const value = args.splice(-1)[0];
+    return foundry.utils.setProperty(doc, `modules.${MODULE.id}.${args.join(".")}`, value);
 }
 
 /**
@@ -25,12 +25,12 @@ export function setInMemory(doc, ...args) {
  * @returns {unknown}
  */
 export function getInMemoryAndSetIfNot(doc, ...args) {
-	const value = args.splice(-1)[0];
-	const current = getInMemory(doc, ...args);
-	if (current != null) return current;
-	const result = typeof value === "function" ? value() : value;
-	setInMemory(doc, ...args, result);
-	return result;
+    const value = args.splice(-1)[0];
+    const current = getInMemory(doc, ...args);
+    if (current != null) return current;
+    const result = typeof value === "function" ? value() : value;
+    setInMemory(doc, ...args, result);
+    return result;
 }
 
 /**
@@ -39,14 +39,14 @@ export function getInMemoryAndSetIfNot(doc, ...args) {
  * @returns {boolean}
  */
 export function deleteInMemory(doc, ...path) {
-	const split = ["modules", MODULE.id, ...path.flatMap((x) => x.split("."))];
-	const last = split.pop();
-	let cursor = doc;
-	for (const key of split) {
-		cursor = cursor[key];
-		if (!cursor) return true;
-	}
-	return delete cursor[last];
+    const split = ["modules", MODULE.id, ...path.flatMap((x) => x.split("."))];
+    const last = split.pop();
+    let cursor = doc;
+    for (const key of split) {
+        cursor = cursor[key];
+        if (!cursor) return true;
+    }
+    return delete cursor[last];
 }
 
 /**
@@ -56,25 +56,24 @@ export function deleteInMemory(doc, ...path) {
  * @returns {Promise<void>}
  */
 export async function updateDocument({ doc, updates, message }, userId) {
-	const foundryDoc =
-		doc instanceof foundry.abstract.Document ? doc : await fromUuid(doc);
+    const foundryDoc = doc instanceof foundry.abstract.Document ? doc : await fromUuid(doc);
 
-	if (!foundryDoc.isOwner) {
-		socketEmit({
-			type: "permission.update-document",
-			doc: foundryDoc.uuid,
-			updates,
-			message,
-		});
-		return;
-	}
+    if (!foundryDoc.isOwner) {
+        socketEmit({
+            type: "permission.update-document",
+            doc: foundryDoc.uuid,
+            updates,
+            message,
+        });
+        return;
+    }
 
-	foundryDoc.update(updates);
+    foundryDoc.update(updates);
 
-	if (message) {
-		message.user = userId ?? game.user.id;
-		ChatMessage.implementation.create(message);
-	}
+    if (message) {
+        message.user = userId ?? game.user.id;
+        ChatMessage.implementation.create(message);
+    }
 }
 
 /** *
@@ -82,7 +81,7 @@ export async function updateDocument({ doc, updates, message }, userId) {
  * @returns {string|undefined}
  */
 export function getSourceId(doc) {
-	return doc.getFlag("core", "sourceId");
+    return doc.getFlag("core", "sourceId");
 }
 
 /**
@@ -91,8 +90,8 @@ export function getSourceId(doc) {
  * @returns {boolean}
  */
 export function includesSourceId(doc, list) {
-	const sourceId = getSourceId(doc);
-	return sourceId ? list.includes(sourceId) : false;
+    const sourceId = getSourceId(doc);
+    return sourceId ? list.includes(sourceId) : false;
 }
 
 /**
@@ -100,7 +99,7 @@ export function includesSourceId(doc, list) {
  * @returns {(item: object) => boolean}
  */
 export function getSourceIdCondition(sourceId) {
-	return Array.isArray(sourceId)
-		? (item) => includesSourceId(item, sourceId)
-		: (item) => getSourceId(item) === sourceId;
+    return Array.isArray(sourceId)
+        ? (item) => includesSourceId(item, sourceId)
+        : (item) => getSourceId(item) === sourceId;
 }

@@ -9,7 +9,7 @@ export const HANDWRAPS_SLUG = "handwraps-of-mighty-blows";
  * @returns {boolean}
  */
 export function canBeInvested(item) {
-	return item.traits.has("invested");
+    return item.traits.has("invested");
 }
 
 /**
@@ -17,7 +17,7 @@ export function canBeInvested(item) {
  * @returns {boolean}
  */
 export function hasWornSlot(item) {
-	return item.system.equipped.inSlot != null;
+    return item.system.equipped.inSlot != null;
 }
 
 /**
@@ -25,7 +25,7 @@ export function hasWornSlot(item) {
  * @returns {boolean}
  */
 function isWornAs(item) {
-	return item.system.usage.type === "worn" && item.system.equipped.inSlot;
+    return item.system.usage.type === "worn" && item.system.equipped.inSlot;
 }
 
 /**
@@ -33,7 +33,7 @@ function isWornAs(item) {
  * @returns {boolean}
  */
 export function isInvestedOrWornAs(item) {
-	return item.isInvested || isWornAs(item);
+    return item.isInvested || isWornAs(item);
 }
 
 /**
@@ -41,7 +41,7 @@ export function isInvestedOrWornAs(item) {
  * @returns {boolean}
  */
 export function isHeld(item) {
-	return item.system.usage.type === "held";
+    return item.system.usage.type === "held";
 }
 
 /**
@@ -49,7 +49,7 @@ export function isHeld(item) {
  * @returns {boolean}
  */
 export function isTwoHanded(item) {
-	return isHeld(item) && item.system.usage.value === "held-in-two-hands";
+    return isHeld(item) && item.system.usage.value === "held-in-two-hands";
 }
 
 /**
@@ -57,7 +57,7 @@ export function isTwoHanded(item) {
  * @returns {boolean}
  */
 export function isOneHanded(item) {
-	return isHeld(item) && item.system.usage.value === "held-in-one-hand";
+    return isHeld(item) && item.system.usage.value === "held-in-one-hand";
 }
 
 /**
@@ -67,8 +67,8 @@ export function isOneHanded(item) {
  * @returns {T|undefined}
  */
 function inSlotValue(item, value) {
-	const usage = item.system.usage;
-	return usage.type === "worn" && usage.where ? value : undefined;
+    const usage = item.system.usage;
+    return usage.type === "worn" && usage.where ? value : undefined;
 }
 
 /**
@@ -77,8 +77,8 @@ function inSlotValue(item, value) {
  * @returns {boolean|undefined}
  */
 function toggleInvestedValue(item, invest) {
-	const value = invest ?? !item.system.equipped.invested;
-	return item.traits.has("invested") ? value : undefined;
+    const value = invest ?? !item.system.equipped.invested;
+    return item.traits.has("invested") ? value : undefined;
 }
 
 /**
@@ -92,26 +92,26 @@ function toggleInvestedValue(item, invest) {
  * @returns {object}
  */
 export function itemCarryUpdate(
-	item,
-	{ carryType = "worn", handsHeld = 0, inSlot, invested, containerId },
+    item,
+    { carryType = "worn", handsHeld = 0, inSlot, invested, containerId }
 ) {
-	const update = {
-		_id: item.id,
-		system: {
-			equipped: {
-				carryType: carryType,
-				handsHeld: handsHeld,
-				inSlot: inSlotValue(item, inSlot),
-				invested: toggleInvestedValue(item, invested),
-			},
-		},
-	};
+    const update = {
+        _id: item.id,
+        system: {
+            equipped: {
+                carryType: carryType,
+                handsHeld: handsHeld,
+                inSlot: inSlotValue(item, inSlot),
+                invested: toggleInvestedValue(item, invested),
+            },
+        },
+    };
 
-	if (containerId !== undefined) {
-		update.system.containerId = containerId;
-	}
+    if (containerId !== undefined) {
+        update.system.containerId = containerId;
+    }
 
-	return update;
+    return update;
 }
 
 /**
@@ -119,11 +119,7 @@ export function itemCarryUpdate(
  * @returns {boolean}
  */
 export function isHandwrapsOfMightyBlows(item) {
-	return (
-		item.isOfType("weapon") &&
-		item.slug === HANDWRAPS_SLUG &&
-		item.category === "unarmed"
-	);
+    return item.isOfType("weapon") && item.slug === HANDWRAPS_SLUG && item.category === "unarmed";
 }
 
 /**
@@ -132,9 +128,9 @@ export function isHandwrapsOfMightyBlows(item) {
  * @returns {Coins}
  */
 export function calculateItemPrice(item, quantity = 1, ratio = 1) {
-	const coins = game.pf2e.Coins.fromPrice(item.price, quantity);
-	if (ratio === 1) return coins;
-	return coins.scale(ratio);
+    const coins = game.pf2e.Coins.fromPrice(item.price, quantity);
+    if (ratio === 1) return coins;
+    return coins.scale(ratio);
 }
 
 /**
@@ -145,166 +141,156 @@ export function calculateItemPrice(item, quantity = 1, ratio = 1) {
  * @param {boolean} [newStack]
  * @returns {Promise<Item>}
  */
-export async function transferItemToActor(
-	target,
-	item,
-	quantity,
-	containerId,
-	newStack,
-) {
-	const itemQuantity = Math.min(quantity, item.quantity);
-	const newQuantity = item.quantity - itemQuantity;
+export async function transferItemToActor(target, item, quantity, containerId, newStack) {
+    const itemQuantity = Math.min(quantity, item.quantity);
+    const newQuantity = item.quantity - itemQuantity;
 
-	if (newQuantity < 1) {
-		await item.delete();
-	} else {
-		await item.update({ "system.quantity": newQuantity });
-	}
+    if (newQuantity < 1) {
+        await item.delete();
+    } else {
+        await item.update({ "system.quantity": newQuantity });
+    }
 
-	const newItemData = item.toObject();
-	newItemData.system.quantity = itemQuantity;
-	newItemData.system.equipped.carryType = "worn";
-	if ("invested" in newItemData.system.equipped) {
-		newItemData.system.equipped.invested = item.traits.has("invested")
-			? false
-			: null;
-	}
+    const newItemData = item.toObject();
+    newItemData.system.quantity = itemQuantity;
+    newItemData.system.equipped.carryType = "worn";
+    if ("invested" in newItemData.system.equipped) {
+        newItemData.system.equipped.invested = item.traits.has("invested") ? false : null;
+    }
 
-	return target.addToInventory(newItemData, containerId, newStack);
+    return target.addToInventory(newItemData, containerId, newStack);
 }
 
 export class MoveLootPopup extends FormApplication {
-	/**
-	 * @param {Actor} object
-	 * @param {object} options
-	 * @param {{default: number, max: number}} options.quantity
-	 * @param {boolean} options.newStack
-	 * @param {boolean} options.lockStack
-	 * @param {boolean} options.isPurchase
-	 * @param {(quantity: number, newStack: boolean) => void} callback
-	 */
-	constructor(object, options, callback) {
-		super(object, options);
-		this.onSubmitCallback = callback;
-	}
+    /**
+     * @param {Actor} object
+     * @param {object} options
+     * @param {{default: number, max: number}} options.quantity
+     * @param {boolean} options.newStack
+     * @param {boolean} options.lockStack
+     * @param {boolean} options.isPurchase
+     * @param {(quantity: number, newStack: boolean) => void} callback
+     */
+    constructor(object, options, callback) {
+        super(object, options);
+        this.onSubmitCallback = callback;
+    }
 
-	async getData() {
-		const [prompt, buttonLabel] = this.options.isPurchase
-			? ["PF2E.loot.PurchaseLootMessage", "PF2E.loot.PurchaseLoot"]
-			: ["PF2E.loot.MoveLootMessage", "PF2E.loot.MoveLoot"];
+    async getData() {
+        const [prompt, buttonLabel] = this.options.isPurchase
+            ? ["PF2E.loot.PurchaseLootMessage", "PF2E.loot.PurchaseLoot"]
+            : ["PF2E.loot.MoveLootMessage", "PF2E.loot.MoveLoot"];
 
-		return {
-			...(await super.getData()),
-			quantity: {
-				default: this.options.quantity.default,
-				max: this.options.quantity.max,
-			},
-			newStack: this.options.newStack,
-			lockStack: this.options.lockStack,
-			prompt,
-			buttonLabel,
-		};
-	}
+        return {
+            ...(await super.getData()),
+            quantity: {
+                default: this.options.quantity.default,
+                max: this.options.quantity.max,
+            },
+            newStack: this.options.newStack,
+            lockStack: this.options.lockStack,
+            prompt,
+            buttonLabel,
+        };
+    }
 
-	static get defaultOptions() {
-		return {
-			...FormApplication.defaultOptions,
-			id: "MoveLootPopup",
-			classes: [],
-			title: game.i18n.localize("PF2E.loot.MoveLootPopupTitle"),
-			template: "systems/pf2e/templates/popups/loot/move-loot-popup.hbs",
-			width: "auto",
-			quantity: {
-				default: 1,
-				max: 1,
-			},
-			newStack: false,
-			lockStack: false,
-			isPurchase: false,
-		};
-	}
+    static get defaultOptions() {
+        return {
+            ...FormApplication.defaultOptions,
+            id: "MoveLootPopup",
+            classes: [],
+            title: game.i18n.localize("PF2E.loot.MoveLootPopupTitle"),
+            template: "systems/pf2e/templates/popups/loot/move-loot-popup.hbs",
+            width: "auto",
+            quantity: {
+                default: 1,
+                max: 1,
+            },
+            newStack: false,
+            lockStack: false,
+            isPurchase: false,
+        };
+    }
 
-	async _updateObject(_event, formData) {
-		this.onSubmitCallback(formData.quantity, formData.newStack);
-	}
+    async _updateObject(_event, formData) {
+        this.onSubmitCallback(formData.quantity, formData.newStack);
+    }
 }
 
 export async function detachSubitem(subitem, skipConfirm) {
-	const parentItem = subitem.parentItem;
-	if (!parentItem) throw ErrorPF2e("Subitem has no parent item");
+    const parentItem = subitem.parentItem;
+    if (!parentItem) throw ErrorPF2e("Subitem has no parent item");
 
-	const localize = localizer("PF2E.Item.Physical.Attach.Detach");
-	const confirmed =
-		skipConfirm ||
-		(await Dialog.confirm({
-			title: localize("Label"),
-			content: createHTMLElement("p", {
-				children: [localize("Prompt", { attachable: subitem.name })],
-			}).outerHTML,
-		}));
-	if (!confirmed) return;
+    const localize = localizer("PF2E.Item.Physical.Attach.Detach");
+    const confirmed =
+        skipConfirm ||
+        (await Dialog.confirm({
+            title: localize("Label"),
+            content: createHTMLElement("p", {
+                children: [localize("Prompt", { attachable: subitem.name })],
+            }).outerHTML,
+        }));
+    if (!confirmed) return;
 
-	const deletePromise = subitem.delete();
-	const createPromise = (async () => {
-		// Find a stack match, cloning the subitem as worn so the search won't fail due to it being equipped
-		const stack = subitem.isOfType("consumable")
-			? parentItem.actor?.inventory.findStackableItem(
-					subitem.clone({ "system.equipped.carryType": "worn" }),
-			  )
-			: null;
-		const keepId =
-			!!parentItem.actor && !parentItem.actor.items.has(subitem.id);
-		return (
-			stack?.update({ "system.quantity": stack.quantity + 1 }) ??
-			Item.implementation.create(
-				mergeObject(subitem.toObject(), {
-					"system.containerId": parentItem.system.containerId,
-				}),
-				{ parent: parentItem.actor, keepId },
-			)
-		);
-	})();
+    const deletePromise = subitem.delete();
+    const createPromise = (async () => {
+        // Find a stack match, cloning the subitem as worn so the search won't fail due to it being equipped
+        const stack = subitem.isOfType("consumable")
+            ? parentItem.actor?.inventory.findStackableItem(
+                  subitem.clone({ "system.equipped.carryType": "worn" })
+              )
+            : null;
+        const keepId = !!parentItem.actor && !parentItem.actor.items.has(subitem.id);
+        return (
+            stack?.update({ "system.quantity": stack.quantity + 1 }) ??
+            Item.implementation.create(
+                foundry.utils.mergeObject(subitem.toObject(), {
+                    "system.containerId": parentItem.system.containerId,
+                }),
+                { parent: parentItem.actor, keepId }
+            )
+        );
+    })();
 
-	await Promise.all([deletePromise, createPromise]);
+    await Promise.all([deletePromise, createPromise]);
 }
 
 export async function unownedItemToMessage(event, item, actor, options = {}) {
-	const ChatMessagePF2e = ChatMessage.implementation;
+    const ChatMessagePF2e = ChatMessage.implementation;
 
-	// Basic template rendering data
-	const type = sluggify(item.type);
-	const template = `systems/pf2e/templates/chat/${type}-card.hbs`;
-	const token = actor.token;
-	const nearestItem = htmlClosest(event?.target, ".item");
-	const rollOptions = options.data ?? { ...(nearestItem?.dataset ?? {}) };
-	const templateData = {
-		actor: actor,
-		tokenId: token ? `${token.parent?.id}.${token.id}` : null,
-		item: item,
-		data: await item.getChatData(undefined, rollOptions),
-	};
+    // Basic template rendering data
+    const type = sluggify(item.type);
+    const template = `systems/pf2e/templates/chat/${type}-card.hbs`;
+    const token = actor.token;
+    const nearestItem = htmlClosest(event?.target, ".item");
+    const rollOptions = options.data ?? { ...(nearestItem?.dataset ?? {}) };
+    const templateData = {
+        actor: actor,
+        tokenId: token ? `${token.parent?.id}.${token.id}` : null,
+        item: item,
+        data: await item.getChatData(undefined, rollOptions),
+    };
 
-	// Basic chat message data
-	const originalEvent =
-		event instanceof MouseEvent ? event : event?.originalEvent;
-	const rollMode = options.rollMode ?? eventToRollMode(originalEvent);
-	const chatData = ChatMessagePF2e.applyRollMode(
-		{
-			type: CONST.CHAT_MESSAGE_TYPES.OTHER,
-			speaker: ChatMessagePF2e.getSpeaker({
-				actor: actor,
-				token: actor.getActiveTokens(false, true).at(0),
-			}),
-			content: await renderTemplate(template, templateData),
-			flags: { pf2e: { origin: item.getOriginData() } },
-		},
-		rollMode,
-	);
+    // Basic chat message data
+    const originalEvent = event instanceof MouseEvent ? event : event?.originalEvent;
+    const rollMode = options.rollMode ?? eventToRollMode(originalEvent);
+    const chatData = ChatMessagePF2e.applyRollMode(
+        {
+            type: CONST.CHAT_MESSAGE_STYLES.OTHER,
+            speaker: ChatMessagePF2e.getSpeaker({
+                actor: actor,
+                token: actor.getActiveTokens(false, true).at(0),
+            }),
+            content: await renderTemplate(template, templateData),
+            flags: { pf2e: { origin: item.getOriginData() } },
+        },
+        rollMode
+    );
 
-	// Create the chat message
-	return options.create ?? true
-		? ChatMessagePF2e.create(chatData, { rollMode, renderSheet: false })
-		: new ChatMessagePF2e(chatData, { rollMode });
+    // Create the chat message
+    return options.create ?? true
+        ? ChatMessagePF2e.create(chatData, { rollMode, renderSheet: false })
+        : new ChatMessagePF2e(chatData, { rollMode });
 }
 
 /**
@@ -313,12 +299,10 @@ export async function unownedItemToMessage(event, item, actor, options = {}) {
  * @returns {boolean}
  */
 export function itemIsOfType(item, ...types) {
-	return (
-		typeof item.name === "string" &&
-		types.some((t) =>
-			t === "physical"
-				? setHasElement(PHYSICAL_ITEM_TYPES, item.type)
-				: item.type === t,
-		)
-	);
+    return (
+        typeof item.name === "string" &&
+        types.some((t) =>
+            t === "physical" ? setHasElement(PHYSICAL_ITEM_TYPES, item.type) : item.type === t
+        )
+    );
 }

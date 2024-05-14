@@ -6,7 +6,7 @@ import { joinStr } from "../utils";
  * @returns {string}
  */
 export function flagPath(...path) {
-	return `flags.${MODULE.id}.${joinStr(".", path)}`;
+    return `flags.${MODULE.id}.${joinStr(".", path)}`;
 }
 
 /**
@@ -15,7 +15,7 @@ export function flagPath(...path) {
  * @returns {unknown}
  */
 export function getFlag(doc, ...path) {
-	return doc.getFlag(MODULE.id, path.join("."));
+    return doc.getFlag(MODULE.id, path.join("."));
 }
 
 /**
@@ -24,7 +24,7 @@ export function getFlag(doc, ...path) {
  * @returns {unknown}
  */
 export function getFlagProperty(doc, ...path) {
-	return getProperty(doc, flagPath(...path));
+    return foundry.utils.getProperty(doc, flagPath(...path));
 }
 
 /**
@@ -34,8 +34,8 @@ export function getFlagProperty(doc, ...path) {
  * @returns {Promise<T>}
  */
 export function setFlag(doc, ...args) {
-	const value = args.splice(-1)[0];
-	return doc.setFlag(MODULE.id, args.join("."), value);
+    const value = args.splice(-1)[0];
+    return doc.setFlag(MODULE.id, args.join("."), value);
 }
 
 /**
@@ -45,7 +45,7 @@ export function setFlag(doc, ...args) {
  * @returns {Promise<T>}
  */
 export function unsetFlag(doc, ...path) {
-	return doc.unsetFlag(MODULE.id, path.join("."));
+    return doc.unsetFlag(MODULE.id, path.join("."));
 }
 
 /**
@@ -53,7 +53,7 @@ export function unsetFlag(doc, ...path) {
  * @returns {unknown}
  */
 export function getModuleFlags(doc) {
-	return getProperty(doc, `flags.${MODULE.id}`);
+    return foundry.utils.getProperty(doc, `flags.${MODULE.id}`);
 }
 
 /**
@@ -62,10 +62,10 @@ export function getModuleFlags(doc) {
  * @returns {object}
  */
 export function updateSourceFlag(doc, ...args) {
-	const value = args.splice(-1)[0];
-	return doc.updateSource({
-		[flagPath(...args)]: value,
-	});
+    const value = args.splice(-1)[0];
+    return doc.updateSource({
+        [flagPath(...args)]: value,
+    });
 }
 
 /**
@@ -73,6 +73,6 @@ export function updateSourceFlag(doc, ...args) {
  * @param  {(string|unknown)[]} args
  */
 export function moduleFlagUpdate(updates, ...args) {
-	const value = args.splice(-1)[0];
-	updates[flagPath(...args)] = value;
+    const value = args.splice(-1)[0];
+    updates[flagPath(...args)] = value;
 }
